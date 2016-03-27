@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>少女展爛会キャラクターシート</title>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
+    <link rel="stylesheet" type="text/css" href="css/cs.css">
+    <script src="js/cs.js"></script>
+  </head>
+  <body>
+    <div style="width: 80%;">
+      <div class="box">
+        <h2>基本</h2>
+        <div>
+          <table>
+            <tbody>
+              <tr>
+                <th>呼び名</th>
+                <td colspan="5"><input type="text"></td>
+              </tr>
+              <tr>
+                <th>クラス</th>
+                <td>
+                  <select>
+                    <option value="-1">-</option>
+                    <option value="0">エンプレス</option>
+                    <option value="1">プリンセス</option>
+                    <option value="2">コート</option>
+                    <option value="3">デイム</option>
+                    <option value="4">ハイブロウ</option>
+                    <option value="5">メイド</option>
+                    <option value="6">コモン</option>
+                    <option value="7">ペット</option>
+                    <option value="8">ゲイム</option>
+                    <option value="9">フェアリー</option>
+                    <option value="10">ボギー</option>
+                  </select>
+                </td>
+                <th>タイプ</th>
+                <td>
+                  <select>
+                    <option value="-1">-</option>
+                    <option value="0">アリス</option>
+                    <option value="1">ドロシー</option>
+                    <option value="2">グレーテル</option>
+                    <option value="3">シンデレラ</option>
+                    <option value="4">なよ竹</option>
+                    <option value="5">赤ずきん</option>
+                    <option value="6">人魚姫</option>
+                    <option value="7">ウェンディ</option>
+                  </select>
+                </td>
+                <th>オーデ</th>
+                <td>
+                  <select>
+                    <option value="-1">-</option>
+                    <option value="0">ハートフル</option>
+                    <option value="1">ロマンティック</option>
+                    <option value="2">ルナティック</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="box">
+        <h2>資質・傾き・慎み</h2>
+        <div>
+          <table style="width: 600px; table-layout: fixed;">
+            <thead>
+              <tr>
+                <th rowspan="2" style="width: 40%;"></th>
+                <th colspan="4" style="width: 20%;">資質</th>
+                <th colspan="2" style="width: 10%;">傾き</th>
+                <th colspan="2" style="width: 10%;">慎み</th>
+                <th class="noborder" style="width: 10%;"></th>
+              </tr>
+              <tr>
+                <th>支配</th>
+                <th>従順</th>
+                <th>打算</th>
+                <th>純真</th>
+                <th>押し</th>
+                <th>察し</th>
+                <th>好意</th>
+                <th>悪意</th>
+                <th class="noborder"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>総計：</th>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td class="noborder"></td>
+              </tr>
+              <tr>
+                <th>クラス：</th>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td class="noborder"></td>
+              </tr>
+              <tr>
+                <th>タイプ：</th>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td class="noborder"></td>
+              </tr>
+              <tr>
+                <th>関係による加算：</th>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td><input type="text" readonly></td>
+                <td class="noborder"></td>
+              </tr>
+              <tr>
+                <th>世界の部品：</th>
+                <th>支配</th>
+                <th>従順</th>
+                <th>打算</th>
+                <th>純真</th>
+                <th>押し</th>
+                <th>察し</th>
+                <th>好意</th>
+                <th>悪意</th>
+                <td class="noborder"></td>
+              </tr>
+              <tr>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="noborder"><button>削除</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <button>行追加</button>
+        </div>
+      </div>
+      <div class="box">
+        <h2>テンションゲージ</h2>
+        <div>
+          <div>
+            <label>蓄積<input type="text" style="width: inherit;"></label>
+          </div>
+          <div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension">5</div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension">10</div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension">15</div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension"></div>
+            <div class="tension">20</div>
+          </div>
+        </div>
+      </div>
+      <div class="box">
+        <h2>アイテム</h2>
+        <div>
+          <table style="width: 450px; table-layout: fixed;">
+            <thead>
+              <tr>
+                <th style="width: 60%;">名前</th>
+                <th style="width: 10%;">主</th>
+                <th style="width: 10%;">副</th>
+                <th class="noborder" style="width: 20%;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text"></td>
+                <td>
+                  <select>
+                    <option value="-1">-</option>
+                    <option value="0">支</option>
+                    <option value="1">従</option>
+                    <option value="2">打</option>
+                    <option value="3">純</option>
+                  </select>
+                </td>
+                <td>
+                  <select>
+                    <option value="-1">-</option>
+                    <option value="0">支</option>
+                    <option value="1">従</option>
+                    <option value="2">打</option>
+                    <option value="3">純</option>
+                    <option value="4">押</option>
+                    <option value="5">察</option>
+                  </select>
+                </td>
+                <td class="noborder"><button>削除</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <button>行追加</button>
+        </div>
+      </div>
+      <div class="box">
+        <h2>特技</h2>
+        <div>
+          <table style="width: 600px; table-layout: fixed;">
+            <thead>
+              <tr>
+                <th style="width: 20%;">名前</th>
+                <th style="width: 10%;">タイミング</th>
+                <th style="width: 10%;">重さ</th>
+                <th style="width: 50%;">内容</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+              </tr>
+              <tr>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+              </tr>
+              <tr>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+              </tr>
+              <tr>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="box">
+        <h2>関係</h2>
+        <div>
+          <table style="width: 450px; table-layout: fixed;">
+            <thead>
+              <tr>
+                <th style="width: 25%;">対象</th>
+                <th style="width: 25%;">関係名</th>
+                <th style="width: 15%;">上下</th>
+                <th style="width: 15%;">受攻</th>
+                <th class="noborder" style="width: 20%;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td>
+                  <select>
+                    <option value="-1">-</option>
+                    <option value="0">支</option>
+                    <option value="1">従</option>
+                    <option value="2">打</option>
+                    <option value="3">純</option>
+                  </select>
+                </td>
+                <td>
+                  <select>
+                    <option value="-1">-</option>
+                    <option value="0">支</option>
+                    <option value="1">従</option>
+                    <option value="2">打</option>
+                    <option value="3">純</option>
+                    <option value="4">押</option>
+                    <option value="5">察</option>
+                  </select>
+                </td>
+                <td class="noborder"><button>削除</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <button>行追加</button>
+        </div>
+      </div>
+      <div class="box">
+        <h2>メモ</h2>
+        <div>
+          <textarea rows="5"></textarea>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
