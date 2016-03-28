@@ -1,3 +1,5 @@
+lazy val scalatraVersion = "2.3.1"
+
 lazy val root = (crossProject in file("."))
   .enablePlugins(ScalaJSPlugin)
   .settings(
@@ -10,11 +12,20 @@ lazy val root = (crossProject in file("."))
   )
   .settings(
     (Seq(fastOptJS, fullOptJS, packageJSDependencies) map { packageJSKey =>
-      crossTarget in(Compile, packageJSKey) := file("./js") / "web"
+      crossTarget in(Compile, packageJSKey) := file("./jvm") / "src" / "main" / "webapp" / "js"
     }): _*
   )
   .jvmSettings(
+    libraryDependencies ++= Seq(
+      "org.scalatra"      %% "scalatra"          % scalatraVersion,
+      "org.scalatra"      %% "scalatra-scalate"  % scalatraVersion,
+      "org.scalatra"      %% "scalatra-specs2"   % scalatraVersion    % "test",
+      "ch.qos.logback"    %  "logback-classic"   % "1.1.3"            % "runtime",
+      "org.eclipse.jetty" %  "jetty-webapp"      % "9.2.10.v20150310" % "container",
+      "javax.servlet"     %  "javax.servlet-api" % "3.1.0"            % "provided"
+    )
   )
+  .jvmSettings(jetty(): _*)
   .jsSettings(
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "0.8.2",
