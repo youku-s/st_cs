@@ -9,6 +9,7 @@
   </head>
   <body>
     <div style="width: 80%;">
+      <h1>少女展爛会キャラクターシート</h1>
       <div class="box">
         <h2>基本</h2>
         <div>
@@ -21,7 +22,7 @@
               <tr>
                 <th>クラス</th>
                 <td>
-                  <select>
+                  <select class="observed">
                     <option value="-1">-</option>
                     <option value="0">エンプレス</option>
                     <option value="1">プリンセス</option>
@@ -38,7 +39,7 @@
                 </td>
                 <th>タイプ</th>
                 <td>
-                  <select>
+                  <select class="observed">
                     <option value="-1">-</option>
                     <option value="0">アリス</option>
                     <option value="1">ドロシー</option>
@@ -150,27 +151,27 @@
                 <td class="noborder"></td>
               </tr>
               <tr class="hiddenRow">
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
                 <td class="noborder"><button class="deleteRow">削除</button></td>
               </tr>
               <tr>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
+                <td><input type="text" class="observed"></td>
                 <td class="noborder"><button class="deleteRow">削除</button></td>
               </tr>
             </tbody>
@@ -211,7 +212,7 @@
       <div class="box">
         <h2>アイテム</h2>
         <div>
-          <table style="width: 450px; table-layout: fixed;">
+          <table class="item" style="width: 450px; table-layout: fixed;">
             <thead>
               <tr>
                 <th style="width: 60%;">名前</th>
@@ -221,10 +222,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr class="hiddenRow">
                 <td><input type="text"></td>
                 <td>
-                  <select>
+                  <select class="observed">
                     <option value="-1">-</option>
                     <option value="0">支</option>
                     <option value="1">従</option>
@@ -233,7 +234,31 @@
                   </select>
                 </td>
                 <td>
-                  <select>
+                  <select class="observed">
+                    <option value="-1">-</option>
+                    <option value="0">支</option>
+                    <option value="1">従</option>
+                    <option value="2">打</option>
+                    <option value="3">純</option>
+                    <option value="4">押</option>
+                    <option value="5">察</option>
+                  </select>
+                </td>
+                <td class="noborder"><button class="deleteRow">削除</button></td>
+              </tr>
+              <tr>
+                <td><input type="text"></td>
+                <td>
+                  <select class="observed">
+                    <option value="-1">-</option>
+                    <option value="0">支</option>
+                    <option value="1">従</option>
+                    <option value="2">打</option>
+                    <option value="3">純</option>
+                  </select>
+                </td>
+                <td>
+                  <select class="observed">
                     <option value="-1">-</option>
                     <option value="0">支</option>
                     <option value="1">従</option>
@@ -247,13 +272,13 @@
               </tr>
             </tbody>
           </table>
-          <button>行追加</button>
+          <button class="addItem">行追加</button>
         </div>
       </div>
       <div class="box">
         <h2>特技</h2>
         <div>
-          <table style="width: 600px; table-layout: fixed;">
+          <table class="skill" style="width: 600px; table-layout: fixed;">
             <thead>
               <tr>
                 <th style="width: 20%;">名前</th>
@@ -294,7 +319,7 @@
       <div class="box">
         <h2>関係</h2>
         <div>
-          <table style="width: 450px; table-layout: fixed;">
+          <table class="relation" style="width: 450px; table-layout: fixed;">
             <thead>
               <tr>
                 <th style="width: 25%;">対象</th>
@@ -305,34 +330,55 @@
               </tr>
             </thead>
             <tbody>
+               <tr class="hiddenRow">
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td>
+                  <select class="observed">
+                    <option value="-1">-</option>
+                    <option value="0">無</option>
+                    <option value="1">上</option>
+                    <option value="2">同</option>
+                    <option value="3">下</option>
+                  </select>
+                </td>
+                <td>
+                  <select class="observed">
+                    <option value="-1">-</option>
+                    <option value="0">無</option>
+                    <option value="1">攻</option>
+                    <option value="2">等</option>
+                    <option value="3">受</option>
+                  </select>
+                </td>
+                <td class="noborder"><button class="deleteRow">削除</button></td>
+              </tr>
               <tr>
                 <td><input type="text"></td>
                 <td><input type="text"></td>
                 <td>
-                  <select>
+                  <select class="observed">
                     <option value="-1">-</option>
-                    <option value="0">支</option>
-                    <option value="1">従</option>
-                    <option value="2">打</option>
-                    <option value="3">純</option>
+                    <option value="0">無</option>
+                    <option value="1">上</option>
+                    <option value="2">同</option>
+                    <option value="3">下</option>
                   </select>
                 </td>
                 <td>
-                  <select>
+                  <select class="observed">
                     <option value="-1">-</option>
-                    <option value="0">支</option>
-                    <option value="1">従</option>
-                    <option value="2">打</option>
-                    <option value="3">純</option>
-                    <option value="4">押</option>
-                    <option value="5">察</option>
+                    <option value="0">無</option>
+                    <option value="1">攻</option>
+                    <option value="2">等</option>
+                    <option value="3">受</option>
                   </select>
                 </td>
                 <td class="noborder"><button class="deleteRow">削除</button></td>
               </tr>
             </tbody>
           </table>
-          <button>行追加</button>
+          <button class="addRelation">行追加</button>
         </div>
       </div>
       <div class="box">
@@ -340,6 +386,9 @@
         <div>
           <textarea rows="5"></textarea>
         </div>
+      </div>
+      <div class="box">
+        「<a href="http://www6.plala.or.jp/scrafts/glexb/" target="_blank">少女展爛会</a>」はSimple Crafts様の著作物です。
       </div>
     </div>
   </body>

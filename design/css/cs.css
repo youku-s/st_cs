@@ -29,6 +29,11 @@ input[type=text], textarea {
   background-color: rgba(0,0,0,0);
   border: 0;
 }
+h1 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px;
+}
 h2 {
   font-weight: bold;
   margin-bottom: 5px;
