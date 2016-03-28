@@ -1,1 +1,6 @@
 .DS_Store
+target
+js/target
+jvm/target
+project/project
+project/target
