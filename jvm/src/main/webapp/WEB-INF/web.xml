@@ -2,24 +2,7 @@
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-	<servlet>
-		<servlet-name>scalatra</servlet-name>
-		<servlet-class>
-			jp.youku_s.st_cs.server.ScalatraServlet
-		</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>scalatra</servlet-name>
-		<url-pattern>/*</url-pattern>
-	</servlet-mapping>
-	
-	<!--
-	<servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>/img/*</url-pattern>
-        <url-pattern>/css/*</url-pattern>
-        <url-pattern>/js/*</url-pattern>
-    </servlet-mapping>
-	-->
+  <listener>
+    <listener-class>org.scalatra.servlet.ScalatraListner</listener-class>
+  </listener>
 </web-app>

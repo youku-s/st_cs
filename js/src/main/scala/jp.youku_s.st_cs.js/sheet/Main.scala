@@ -6,7 +6,7 @@ import scala.scalajs.js
 import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
 
-import japgolly.scalajs.react.{BackendScope, ReactComponentB, ReactDOM, ReactElement}
+import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactDOM, ReactElement, ReactEventI}
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
@@ -83,10 +83,11 @@ object Tension {
   )
 }
 
+case class BaseProp(onChange: ReactEventI => Callback)
 case class BaseState(name: String, csClass: Option[Int], csType: Option[Int], csEaude: Option[Int])
 
-class BaseBackend($: BackendScope[Unit, BaseState]) {
-  def render(s: BaseState): ReactElement = {
+class BaseBackend($: BackendScope[BaseProp, BaseState]) {
+  def render(p: BaseProp, s: BaseState): ReactElement = {
     <.div(
       ^.classSet("box" -> true),
       <.h2("基本"),
@@ -100,6 +101,50 @@ class BaseBackend($: BackendScope[Unit, BaseState]) {
                 <.input(
                   ^.`type` := "text",
                   ^.value := s.name
+                )
+              )
+            ),
+            <.tr(
+              <.th("クラス"),
+              <.td(
+                <.select(
+                  ^.onChange ==> p.onChange,
+                  <.option(^.value := "-1", "-"),
+                  <.option(^.value := "0", "エンプレス"),
+                  <.option(^.value := "1", "プリンセス"),
+                  <.option(^.value := "2", "コート"),
+                  <.option(^.value := "3", "デイム"),
+                  <.option(^.value := "4", "ハイブロウ"),
+                  <.option(^.value := "5", "メイド"),
+                  <.option(^.value := "6", "コモン"),
+                  <.option(^.value := "7", "ペット"),
+                  <.option(^.value := "8", "ゲイム"),
+                  <.option(^.value := "9", "フェアリー"),
+                  <.option(^.value := "10", "ボギー")
+                )
+              ),
+              <.th("タイプ"),
+              <.td(
+                <.select(
+                  ^.onChange ==> p.onChange,
+                  <.option(^.value := "-1", "-"),
+                  <.option(^.value := "0", "アリス"),
+                  <.option(^.value := "1", "ドロシー"),
+                  <.option(^.value := "2", "グレーテル"),
+                  <.option(^.value := "3", "シンデレラ"),
+                  <.option(^.value := "4", "なよ竹"),
+                  <.option(^.value := "5", "赤ずきん"),
+                  <.option(^.value := "6", "人魚姫"),
+                  <.option(^.value := "7", "ウェンディ")
+                )
+              ),
+              <.th("オーデ"),
+              <.td(
+                <.select(
+                  <.option(^.value := "-1", "-"),
+                  <.option(^.value := "0", "ハートフル"),
+                  <.option(^.value := "1", "ロマンティック"),
+                  <.option(^.value := "2", "ルナティック")
                 )
               )
             )
@@ -127,7 +172,7 @@ object State {
 }
 
 class TopBackend($: BackendScope[Unit, State]) {
-  val base = ReactComponentB[Unit]("Base")
+  val base = ReactComponentB[BaseProp]("Base")
     .initialState(BaseState("", None, None, None))
     .renderBackend[BaseBackend]
     .build
@@ -135,7 +180,7 @@ class TopBackend($: BackendScope[Unit, State]) {
     <.div(
       ^.style := js.Dictionary("width" -> "80%"),
       <.h1("少女展爛会キャラクターシート"),
-      base(())
+      base(BaseProp(e => Callback{println(e)}))
     )
   }
 }
