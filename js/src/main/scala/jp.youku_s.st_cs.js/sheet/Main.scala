@@ -11,6 +11,8 @@ import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
 case class State(
+  name: String,
+  playerName: String,
   csClass: Option[Int],
   csType: Option[Int],
   csEaude: Option[Int],
@@ -81,8 +83,37 @@ object Tension {
   )
 }
 
+case class BaseState(name: String, csClass: Option[Int], csType: Option[Int], csEaude: Option[Int])
+
+class BaseBackend($: BackendScope[Unit, BaseState]) {
+  def render(s: BaseState): ReactElement = {
+    <.div(
+      ^.classSet("box" -> true),
+      <.h2("基本"),
+      <.div(
+        <.table(
+          <.tbody(
+            <.tr(
+              <.th("呼び名"),
+              <.td(
+                ^.colSpan := "5",
+                <.input(
+                  ^.`type` := "text",
+                  ^.value := s.name
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  }
+}
+
 object State {
   def initialValue: State = State(
+    name = "",
+    playerName = "",
     csClass = None,
     csType = None,
     csEaude = None,
@@ -96,11 +127,16 @@ object State {
 }
 
 class TopBackend($: BackendScope[Unit, State]) {
+  val base = ReactComponentB[Unit]("Base")
+    .initialState(BaseState("", None, None, None))
+    .renderBackend[BaseBackend]
+    .build
   def render(s: State): ReactElement = {
-     <.div(
-       ^.style := js.Dictionary("width" -> "80%"),
-       <.h1("少女展爛会キャラクターシート")
-     )
+    <.div(
+      ^.style := js.Dictionary("width" -> "80%"),
+      <.h1("少女展爛会キャラクターシート"),
+      base(())
+    )
   }
 }
 
