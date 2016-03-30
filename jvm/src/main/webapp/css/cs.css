@@ -48,3 +48,7 @@ div.tension {
 .hiddenRow {
   display: none;
 }
+table.part {
+  width: 600px;
+  table-layout: fixed;
+}

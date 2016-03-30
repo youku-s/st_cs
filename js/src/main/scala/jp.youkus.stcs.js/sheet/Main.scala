@@ -29,15 +29,28 @@ case class Part(
   talent: Talent
 )
 case class Talent(
-  shihai: Int,
-  jyujyun: Int,
-  dasan: Int,
-  jyunshin: Int,
-  oshi: Int,
-  sasshi: Int,
-  koui: Int,
-  akui: Int
+  shihai: Option[Int],
+  jyujyun: Option[Int],
+  dasan: Option[Int],
+  jyunshin: Option[Int],
+  oshi: Option[Int],
+  sasshi: Option[Int],
+  koui: Option[Int],
+  akui: Option[Int]
 )
+object Talent {
+  def default: Talent = Talent(None, None, None, None, None, None, None, None)
+  def preset(shihai: Int, jyujyun: Int, dasan: Int, jyunshin: Int, oshi: Int, sasshi: Int, koui: Int, akui: Int): Talent = Talent(
+    Option(shihai),
+    Option(jyujyun),
+    Option(dasan),
+    Option(jyunshin),
+    Option(oshi),
+    Option(sasshi),
+    Option(koui),
+    Option(akui)
+  )
+}
 case class Item(
   name: String,
   main: Int,
@@ -102,48 +115,8 @@ object State {
   )
 }
 
-object TalentTable {
-  case class Prop(
-    csClass: Option[Int],
-    csType: Option[Int],
-    relations: Seq[Relation]
-  )
-  class Backend(scope: BackendScope[Prop, Unit]) {
-    def render(p: Prop): ReactElement = {
-      <.div("hoge")
-    }
-  }
-}
-
 object Top {
   class Backend(scope: BackendScope[Unit, State]) {
-    val classTallentMap = Map(
-      0 -> Talent(3, 1, 1, 1, 1, 1, 1, 1),
-      1 -> Talent(3, 2, 2, 2, 1, 0, 0, 0),
-      2 -> Talent(2, 1, 3, 1, 0, 1, 1, 1),
-      3 -> Talent(2, 2, 1, 2, 0, 1, 1, 1),
-      4 -> Talent(1, 2, 1, 3, 1, 1, 1, 0),
-      5 -> Talent(1, 3, 2, 1, 0, 1, 1, 1),
-      6 -> Talent(1, 2, 2, 2, 0, 1, 1, 1),
-      7 -> Talent(1, 3, 2, 1, 1, 1, 0, 1),
-      8 -> Talent(3, 1, 1, 2, 1, 0, 1, 1),
-      9 -> Talent(1, 2, 2, 3, 1, 0, 1, 0),
-      10 -> Talent(2, 1, 3, 2, 1, 0, 0, 1)
-    )
-    val typeTallentMap = Map(
-      0 -> Talent(1, 0, 2, 0, 2, 1, 2, 1),
-      1 -> Talent(1, 1, 1, 1, 1, 2, 1, 1),
-      2 -> Talent(2, 0, 1, 0, 2, 1, 1, 2),
-      3 -> Talent(0, 2, 0, 1, 1, 1, 2, 2),
-      4 -> Talent(1, 1, 0, 0, 1, 2, 2, 2),
-      5 -> Talent(0, 1, 1, 1, 2, 2, 1, 1),
-      6 -> Talent(0, 1, 0, 2, 2, 1, 1, 2),
-      7 -> Talent(1, 0, 1, 1, 1, 2, 2, 1)
-    )
-    val talentTable = ReactComponentB[TalentTable.Prop]("TalentTable")
-      .stateless
-      .renderBackend[TalentTable.Backend]
-      .build
     def toIntOpt(x: String): Option[Int] = try {
       Some(x.toInt)
     } catch {
@@ -161,12 +134,14 @@ object Top {
     def onEaudeChange(e: ReactEventI): Callback = {
       scope.modState(_.copy(csEaude = toIntOpt(e.target.value)))
     }
+//    def on(e: ReactEventI): Callback = {
+//    }
     def render(s: State): ReactElement = {
       <.div(
         ^.style := js.Dictionary("width" -> "80%"),
         <.h1("少女展爛会キャラクターシート"),
-        BaseTable.component()(BaseTable.Prop(onNameChange, onClassChange, onTypeChange, onEaudeChange, s.name, s.csClass, s.csType, s.csEaude)),
-        talentTable(TalentTable.Prop(s.csClass, s.csType, s.relations))
+        BaseTable.component(BaseTable.Prop(onNameChange, onClassChange, onTypeChange, onEaudeChange, s.name, s.csClass, s.csType, s.csEaude)),
+        TalentTable.component(TalentTable.Prop(s.csClass, s.csType, s.relations, s.parts))
       )
     }
   }

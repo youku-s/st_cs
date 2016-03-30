@@ -88,11 +88,11 @@ object BaseTable {
       )
     }
   }
-  def component() = {
+  def component(p: Prop) = {
     ReactComponentB[Prop]("BaseTable")
       .stateless
       .renderBackend[Backend]
-      .build
+      .build(p)
   }
 }
 
