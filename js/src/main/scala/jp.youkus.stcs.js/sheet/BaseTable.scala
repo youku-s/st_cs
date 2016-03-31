@@ -11,17 +11,14 @@ object BaseTable {
     csType: Option[Int],
     csEaude: Option[Int]
   )
-  class Backend(scope: BackendScope[Prop, String], pScope: BackendScope[Unit, State]) {
-    def onNameChange(e: ReactEventI): Callback = {
-      scope.setState(e.target.value)
-    }
+  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, State]) {
     def toIntOpt(x: String): Option[Int] = try {
       Some(x.toInt)
     } catch {
       case e: Exception => None
     }
-    def onNameFocusOut(s: String)(e: ReactEventI): Callback = {
-      pScope.modState(_.copy(name = s))
+    def onNameChange(e: ReactEventI): Callback = {
+      pScope.modState(_.copy(name = e.target.value))
     }
     def onClassChange(e: ReactEventI): Callback = {
       pScope.modState(_.copy(csClass = toIntOpt(e.target.value)))
@@ -32,7 +29,7 @@ object BaseTable {
     def onEaudeChange(e: ReactEventI): Callback = {
       pScope.modState(_.copy(csEaude = toIntOpt(e.target.value)))
     }
-    def render(p: Prop, s: String) = {
+    def render(p: Prop) = {
       <.div(
         ^.classSet("box" -> true),
         <.h2("基本"),
@@ -45,10 +42,8 @@ object BaseTable {
                   ^.colSpan := "5",
                   <.input(
                     ^.`type` := "text",
-                    ^.value := s,
-                    ^.onInput ==> onNameChange,
-                    ^.onChange --> Callback {},
-                    ^.onBlur ==> onNameFocusOut(s)_
+                    ^.value := p.name,
+                    ^.onChange ==> onNameChange
                   )
                 )
               ),
@@ -106,12 +101,12 @@ object BaseTable {
       )
     }
   }
-  def component(p: Prop, pScope: BackendScope[Unit, State]) = {
+  def component(pScope: BackendScope[Unit, State]) = {
     ReactComponentB[Prop]("BaseTable")
-      .initialState(p.name)
+      .stateless
       .backend(scope => new BaseTable.Backend(scope, pScope))
       .renderBackend
-      .build(p)
+      .build
   }
 }
 

@@ -386,11 +386,11 @@ object TalentTable {
       )
     }
   }
-  def component(p: Prop) = {
+  def component() = {
     ReactComponentB[TalentTable.Prop]("TalentTable")
       .stateless
       .renderBackend[TalentTable.Backend]
-      .build(p)
+      .build
   }
 }
 

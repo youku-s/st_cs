@@ -117,14 +117,14 @@ object State {
 
 object Top {
   class Backend(scope: BackendScope[Unit, State]) {
-//    def on(e: ReactEventI): Callback = {
-//    }
+    val baseTable = BaseTable.component(scope)
+    val talentTable = TalentTable.component()
     def render(s: State): ReactElement = {
       <.div(
         ^.style := js.Dictionary("width" -> "80%"),
         <.h1("少女展爛会キャラクターシート"),
-        BaseTable.component(BaseTable.Prop(s.name, s.csClass, s.csType, s.csEaude), scope),
-        TalentTable.component(TalentTable.Prop(s.csClass, s.csType, s.relations, s.parts))
+        baseTable(BaseTable.Prop(s.name, s.csClass, s.csType, s.csEaude)),
+        talentTable(TalentTable.Prop(s.csClass, s.csType, s.relations, s.parts))
       )
     }
   }
