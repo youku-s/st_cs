@@ -152,6 +152,9 @@ object TalentTable {
                     ^.value := classTalent.flatMap(_.akui).map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
+                ),
+                <.td(
+                  ^.classSet("noborder" -> true)
                 )
               ),
               <.tr(
@@ -160,6 +163,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("shihai" -> true),
+                    ^.value := typeTalent.flatMap(_.shihai).map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -167,6 +171,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("jyujyun" -> true),
+                    ^.value := typeTalent.flatMap(_.jyujyun).map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -174,6 +179,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("dasan" -> true),
+                    ^.value := typeTalent.flatMap(_.dasan).map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -181,6 +187,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("jyunshin" -> true),
+                    ^.value := typeTalent.flatMap(_.jyunshin).map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -188,6 +195,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("oshi" -> true),
+                    ^.value := typeTalent.flatMap(_.oshi).map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -195,6 +203,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("sasshi" -> true),
+                    ^.value := typeTalent.flatMap(_.sasshi).map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -202,6 +211,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("koui" -> true),
+                    ^.value := typeTalent.flatMap(_.koui).map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -209,8 +219,12 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("akui" -> true),
+                    ^.value := typeTalent.flatMap(_.akui).map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
+                ),
+                <.td(
+                  ^.classSet("noborder" -> true)
                 )
               ),
               <.tr(
@@ -270,6 +284,9 @@ object TalentTable {
                     ^.classSet("akui" -> true),
                     ^.readOnly := true
                   )
+                ),
+                <.td(
+                  ^.classSet("noborder" -> true)
                 )
               ),
               <.tr(
@@ -349,10 +366,21 @@ object TalentTable {
                       ^.classSet("akui" -> true),
                       ^.value := part.talent.akui
                     )
+                  ),
+                  <.td(
+                    ^.classSet("noborder" -> true),
+                    <.button(
+                      ^.classSet("deleteRow" -> true),
+                      "削除"
+                    )
                   )
                 )
               }
             )
+          ),
+          <.button(
+            ^.classSet("addPart" -> true),
+            "行追加"
           )
         )
       )
