@@ -6,17 +6,33 @@ import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
 object BaseTable {
   case class Prop(
-    onNameChange: ReactEventI => Callback,
-    onClassChange: ReactEventI => Callback,
-    onTypeChange: ReactEventI => Callback,
-    onEaudeChange: ReactEventI => Callback,
     name: String,
     csClass: Option[Int],
     csType: Option[Int],
     csEaude: Option[Int]
   )
-  class Backend(scope: BackendScope[Prop, Unit]) {
-    def render(p: Prop): ReactElement = {
+  class Backend(scope: BackendScope[Prop, String], pScope: BackendScope[Unit, State]) {
+    def onNameChange(e: ReactEventI): Callback = {
+      scope.setState(e.target.value)
+    }
+    def toIntOpt(x: String): Option[Int] = try {
+      Some(x.toInt)
+    } catch {
+      case e: Exception => None
+    }
+    def onNameFocusOut(s: String)(e: ReactEventI): Callback = {
+      pScope.modState(_.copy(name = s))
+    }
+    def onClassChange(e: ReactEventI): Callback = {
+      pScope.modState(_.copy(csClass = toIntOpt(e.target.value)))
+    }
+    def onTypeChange(e: ReactEventI): Callback = {
+      pScope.modState(_.copy(csType = toIntOpt(e.target.value)))
+    }
+    def onEaudeChange(e: ReactEventI): Callback = {
+      pScope.modState(_.copy(csEaude = toIntOpt(e.target.value)))
+    }
+    def render(p: Prop, s: String) = {
       <.div(
         ^.classSet("box" -> true),
         <.h2("基本"),
@@ -29,8 +45,10 @@ object BaseTable {
                   ^.colSpan := "5",
                   <.input(
                     ^.`type` := "text",
-                    ^.value := p.name,
-                    ^.onChange ==> p.onNameChange
+                    ^.value := s,
+                    ^.onInput ==> onNameChange,
+                    ^.onChange --> Callback {},
+                    ^.onBlur ==> onNameFocusOut(s)_
                   )
                 )
               ),
@@ -39,7 +57,7 @@ object BaseTable {
                 <.td(
                   <.select(
                     ^.value := p.csClass.getOrElse(-1),
-                    ^.onChange ==> p.onClassChange,
+                    ^.onChange ==> onClassChange,
                     <.option(^.value := "-1", "-"),
                     <.option(^.value := "0", "エンプレス"),
                     <.option(^.value := "1", "プリンセス"),
@@ -58,7 +76,7 @@ object BaseTable {
                 <.td(
                   <.select(
                     ^.value := p.csType.getOrElse(-1),
-                    ^.onChange ==> p.onTypeChange,
+                    ^.onChange ==> onTypeChange,
                     <.option(^.value := "-1", "-"),
                     <.option(^.value := "0", "アリス"),
                     <.option(^.value := "1", "ドロシー"),
@@ -74,7 +92,7 @@ object BaseTable {
                 <.td(
                   <.select(
                     ^.value := p.csEaude.getOrElse(-1),
-                    ^.onChange ==> p.onEaudeChange,
+                    ^.onChange ==> onEaudeChange,
                     <.option(^.value := "-1", "-"),
                     <.option(^.value := "0", "ハートフル"),
                     <.option(^.value := "1", "ロマンティック"),
@@ -88,10 +106,11 @@ object BaseTable {
       )
     }
   }
-  def component(p: Prop) = {
+  def component(p: Prop, pScope: BackendScope[Unit, State]) = {
     ReactComponentB[Prop]("BaseTable")
-      .stateless
-      .renderBackend[Backend]
+      .initialState(p.name)
+      .backend(scope => new BaseTable.Backend(scope, pScope))
+      .renderBackend
       .build(p)
   }
 }

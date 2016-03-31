@@ -117,30 +117,13 @@ object State {
 
 object Top {
   class Backend(scope: BackendScope[Unit, State]) {
-    def toIntOpt(x: String): Option[Int] = try {
-      Some(x.toInt)
-    } catch {
-      case e: Exception => None
-    }
-    def onNameChange(e: ReactEventI): Callback = {
-      scope.modState(_.copy(name = e.target.value))
-    }
-    def onClassChange(e: ReactEventI): Callback = {
-      scope.modState(_.copy(csClass = toIntOpt(e.target.value)))
-    }
-    def onTypeChange(e: ReactEventI): Callback = {
-      scope.modState(_.copy(csType = toIntOpt(e.target.value)))
-    }
-    def onEaudeChange(e: ReactEventI): Callback = {
-      scope.modState(_.copy(csEaude = toIntOpt(e.target.value)))
-    }
 //    def on(e: ReactEventI): Callback = {
 //    }
     def render(s: State): ReactElement = {
       <.div(
         ^.style := js.Dictionary("width" -> "80%"),
         <.h1("少女展爛会キャラクターシート"),
-        BaseTable.component(BaseTable.Prop(onNameChange, onClassChange, onTypeChange, onEaudeChange, s.name, s.csClass, s.csType, s.csEaude)),
+        BaseTable.component(BaseTable.Prop(s.name, s.csClass, s.csType, s.csEaude), scope),
         TalentTable.component(TalentTable.Prop(s.csClass, s.csType, s.relations, s.parts))
       )
     }
