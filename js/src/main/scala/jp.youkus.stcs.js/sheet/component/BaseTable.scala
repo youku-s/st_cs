@@ -1,8 +1,10 @@
-package jp.youkus.stcs.js.sheet
+package jp.youkus.stcs.js.sheet.component
 
 import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactElement, ReactEventI}
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
+
+import jp.youkus.stcs.js.sheet.{model => M}
 
 object BaseTable {
   case class Prop(
@@ -11,7 +13,7 @@ object BaseTable {
     csType: Option[Int],
     csEaude: Option[Int]
   )
-  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, State]) {
+  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.App]) {
     def toIntOpt(x: String): Option[Int] = try {
       Some(x.toInt)
     } catch {
@@ -101,7 +103,7 @@ object BaseTable {
       )
     }
   }
-  def component(pScope: BackendScope[Unit, State]) = {
+  def component(pScope: BackendScope[Unit, M.App]) = {
     ReactComponentB[Prop]("BaseTable")
       .stateless
       .backend(scope => new BaseTable.Backend(scope, pScope))

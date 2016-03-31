@@ -1,4 +1,4 @@
-package jp.youkus.stcs.js.sheet
+package jp.youkus.stcs.js.sheet.component
 
 import scala.scalajs.js
 
@@ -6,36 +6,38 @@ import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactEle
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
+import jp.youkus.stcs.js.sheet.{model => M}
+
 object TalentTable {
   case class Prop(
     csClass: Option[Int],
     csType: Option[Int],
-    relations: Seq[Relation],
-    parts: Seq[Part]
+    relations: Seq[M.Relation],
+    parts: Seq[M.Part]
   )
   class Backend(scope: BackendScope[Prop, Unit]) {
     val classTalentMap = Map(
-      0 -> Talent.preset(3, 1, 1, 1, 1, 1, 1, 1),
-      1 -> Talent.preset(3, 2, 2, 2, 1, 0, 0, 0),
-      2 -> Talent.preset(2, 1, 3, 1, 0, 1, 1, 1),
-      3 -> Talent.preset(2, 2, 1, 2, 0, 1, 1, 1),
-      4 -> Talent.preset(1, 2, 1, 3, 1, 1, 1, 0),
-      5 -> Talent.preset(1, 3, 2, 1, 0, 1, 1, 1),
-      6 -> Talent.preset(1, 2, 2, 2, 0, 1, 1, 1),
-      7 -> Talent.preset(1, 3, 2, 1, 1, 1, 0, 1),
-      8 -> Talent.preset(3, 1, 1, 2, 1, 0, 1, 1),
-      9 -> Talent.preset(1, 2, 2, 3, 1, 0, 1, 0),
-      10 -> Talent.preset(2, 1, 3, 2, 1, 0, 0, 1)
+      0 -> M.Talent.preset(3, 1, 1, 1, 1, 1, 1, 1),
+      1 -> M.Talent.preset(3, 2, 2, 2, 1, 0, 0, 0),
+      2 -> M.Talent.preset(2, 1, 3, 1, 0, 1, 1, 1),
+      3 -> M.Talent.preset(2, 2, 1, 2, 0, 1, 1, 1),
+      4 -> M.Talent.preset(1, 2, 1, 3, 1, 1, 1, 0),
+      5 -> M.Talent.preset(1, 3, 2, 1, 0, 1, 1, 1),
+      6 -> M.Talent.preset(1, 2, 2, 2, 0, 1, 1, 1),
+      7 -> M.Talent.preset(1, 3, 2, 1, 1, 1, 0, 1),
+      8 -> M.Talent.preset(3, 1, 1, 2, 1, 0, 1, 1),
+      9 -> M.Talent.preset(1, 2, 2, 3, 1, 0, 1, 0),
+      10 -> M.Talent.preset(2, 1, 3, 2, 1, 0, 0, 1)
     )
     val typeTalentMap = Map(
-      0 -> Talent.preset(1, 0, 2, 0, 2, 1, 2, 1),
-      1 -> Talent.preset(1, 1, 1, 1, 1, 2, 1, 1),
-      2 -> Talent.preset(2, 0, 1, 0, 2, 1, 1, 2),
-      3 -> Talent.preset(0, 2, 0, 1, 1, 1, 2, 2),
-      4 -> Talent.preset(1, 1, 0, 0, 1, 2, 2, 2),
-      5 -> Talent.preset(0, 1, 1, 1, 2, 2, 1, 1),
-      6 -> Talent.preset(0, 1, 0, 2, 2, 1, 1, 2),
-      7 -> Talent.preset(1, 0, 1, 1, 1, 2, 2, 1)
+      0 -> M.Talent.preset(1, 0, 2, 0, 2, 1, 2, 1),
+      1 -> M.Talent.preset(1, 1, 1, 1, 1, 2, 1, 1),
+      2 -> M.Talent.preset(2, 0, 1, 0, 2, 1, 1, 2),
+      3 -> M.Talent.preset(0, 2, 0, 1, 1, 1, 2, 2),
+      4 -> M.Talent.preset(1, 1, 0, 0, 1, 2, 2, 2),
+      5 -> M.Talent.preset(0, 1, 1, 1, 2, 2, 1, 1),
+      6 -> M.Talent.preset(0, 1, 0, 2, 2, 1, 1, 2),
+      7 -> M.Talent.preset(1, 0, 1, 1, 1, 2, 2, 1)
     )
     def render(p: Prop): ReactElement = {
       val classTalent = p.csClass.flatMap(c => classTalentMap.get(c))
@@ -303,7 +305,7 @@ object TalentTable {
                   ^.classSet("noborder" -> true)
                 )
               ),
-              (if(p.parts.isEmpty) Seq(Part("", Talent.default)) else p.parts).map{ part =>
+              (if(p.parts.isEmpty) Seq(M.Part("", M.Talent.default)) else p.parts).map{ part =>
                 <.tr(
                   <.td(
                     <.input(
