@@ -6,10 +6,10 @@ case class App(
   csClass: Option[Int],
   csType: Option[Int],
   csEaude: Option[Int],
-  parts: Seq[Part],
-  items: Seq[Item],
-  skills: Seq[Skill],
-  relations: Seq[Relation],
+  parts: Map[Int, Part],
+  items: Map[Int, Item],
+  skills: Map[Int, Skill],
+  relations: Map[Int, Relation],
   tensions: Seq[Tension],
   memo: String
 )
@@ -43,20 +43,20 @@ object Talent {
 }
 case class Item(
   name: String,
-  main: Int,
-  sub: Int
+  main: Option[Int],
+  sub: Option[Int]
 )
 case class Skill(
   name: String,
   timing: String,
-  cost: Int,
+  cost: Option[Int],
   detail: String
 )
 case class Relation(
   to: String,
   name: String,
-  ueshita: Int,
-  semeuke: Int
+  ueshita: Option[Int],
+  semeuke: Option[Int]
 )
 case class Tension(
   number: Option[Int],
@@ -96,10 +96,10 @@ object App {
     csClass = None,
     csType = None,
     csEaude = None,
-    parts = Seq.empty,
-    items = Seq.empty,
-    skills = Seq.empty,
-    relations = Seq.empty,
+    parts = Map(0 -> Part("", Talent.default)),
+    items = Map(0 -> Item("", None, None)),
+    skills = Map(0 -> Skill("", "", None, "")),
+    relations = Map(0 -> Relation("", "", None, None)),
     tensions = Tension.initial,
     memo = ""
   )

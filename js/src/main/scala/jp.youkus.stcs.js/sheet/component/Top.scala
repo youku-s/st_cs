@@ -11,7 +11,7 @@ import jp.youkus.stcs.js.sheet.{model => M}
 object Top {
   class Backend(scope: BackendScope[Unit, M.App]) {
     val baseTable = BaseTable.component(scope)
-    val talentTable = TalentTable.component()
+    val talentTable = TalentTable.component(scope)
     def render(s: M.App): ReactElement = {
       <.div(
         ^.style := js.Dictionary("width" -> "80%"),

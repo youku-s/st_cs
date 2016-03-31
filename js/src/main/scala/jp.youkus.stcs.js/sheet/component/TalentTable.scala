@@ -6,16 +6,83 @@ import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactEle
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
-import jp.youkus.stcs.js.sheet.{model => M}
+import jp.youkus.stcs.js.sheet.{model => M, util}
 
 object TalentTable {
   case class Prop(
     csClass: Option[Int],
     csType: Option[Int],
-    relations: Seq[M.Relation],
-    parts: Seq[M.Part]
+    relations: Map[Int, M.Relation],
+    parts: Map[Int, M.Part]
   )
-  class Backend(scope: BackendScope[Prop, Unit]) {
+  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.App]) {
+    def onChange(index: Int, f: (M.Part, String) => M.Part)(e: ReactEventI): Callback = {
+      pScope.modState(s => 
+        s.copy(
+          parts = s.parts.get(index) match {
+            case Some(p) => s.parts + (index -> f(p, e.target.value))
+            case None => s.parts
+          }
+        )
+      )
+    }
+    def deleteRow(index: Int): Callback = {
+      pScope.modState(s =>
+        s.copy(
+          parts = s.parts.get(index) match {
+            case Some(p) => s.parts - index
+            case None => s.parts
+          }
+        )
+      )
+    }
+    def addRow(): Callback = {
+      pScope.modState(s =>
+        s.copy(
+          parts = {
+            val next = if (s.parts.isEmpty) 0 else s.parts.keys.max + 1
+            s.parts + (next -> M.Part("", M.Talent.default))
+          }
+        )
+      )
+    }
+    def calculateRelationTalent(relations: Map[Int, M.Relation]): M.Talent = {
+      val rels = relations.values
+      var shihai = 0
+      var jyunshin = 0
+      var dasan = 0
+      var jyujyun = 0
+      var oshi = 0
+      var sasshi = 0
+      val ueshitaGroup = rels.groupBy(x => x.ueshita)
+      val semeukeGroup = rels.groupBy(x => x.semeuke)
+      shihai += ueshitaGroup.get(Some(1)).getOrElse(Seq.empty).size / 4
+      dasan += ueshitaGroup.get(Some(1)).getOrElse(Seq.empty).size / 4
+      jyunshin += ueshitaGroup.get(Some(2)).getOrElse(Seq.empty).size / 4
+      oshi += ueshitaGroup.get(Some(2)).getOrElse(Seq.empty).size / 4
+      jyujyun += ueshitaGroup.get(Some(3)).getOrElse(Seq.empty).size / 4
+      jyunshin += ueshitaGroup.get(Some(3)).getOrElse(Seq.empty).size / 4
+      shihai += semeukeGroup.get(Some(1)).getOrElse(Seq.empty).size / 4
+      oshi += semeukeGroup.get(Some(1)).getOrElse(Seq.empty).size / 4
+      dasan += semeukeGroup.get(Some(2)).getOrElse(Seq.empty).size / 4
+      sasshi += semeukeGroup.get(Some(2)).getOrElse(Seq.empty).size / 4
+      jyujyun += semeukeGroup.get(Some(3)).getOrElse(Seq.empty).size / 4
+      sasshi += semeukeGroup.get(Some(3)).getOrElse(Seq.empty).size / 4
+      M.Talent.preset(shihai, jyujyun, dasan, jyunshin, oshi, sasshi, 0, 0)
+    }
+    def calculateTotalTalent(csT: Option[M.Talent], tyT: Option[M.Talent], rlT: M.Talent, parts: Map[Int, M.Part]): M.Talent = {
+      val psTs = parts.values.map(_.talent)
+      M.Talent.preset(
+        shihai = csT.flatMap(_.shihai).getOrElse(0) + tyT.flatMap(_.shihai).getOrElse(0) + rlT.shihai.getOrElse(0) + psTs.foldLeft(0)(_ + _.shihai.getOrElse(0)),
+        jyujyun = csT.flatMap(_.jyujyun).getOrElse(0) + tyT.flatMap(_.jyujyun).getOrElse(0) + rlT.jyujyun.getOrElse(0) + psTs.foldLeft(0)(_ + _.jyujyun.getOrElse(0)),
+        dasan = csT.flatMap(_.dasan).getOrElse(0) + tyT.flatMap(_.dasan).getOrElse(0) + rlT.dasan.getOrElse(0) + psTs.foldLeft(0)(_ + _.dasan.getOrElse(0)),
+        jyunshin = csT.flatMap(_.jyunshin).getOrElse(0) + tyT.flatMap(_.jyunshin).getOrElse(0) + rlT.jyunshin.getOrElse(0) + psTs.foldLeft(0)(_ + _.jyunshin.getOrElse(0)),
+        oshi = csT.flatMap(_.oshi).getOrElse(0) + tyT.flatMap(_.oshi).getOrElse(0) + rlT.oshi.getOrElse(0) + psTs.foldLeft(0)(_ + _.oshi.getOrElse(0)),
+        sasshi = csT.flatMap(_.sasshi).getOrElse(0) + tyT.flatMap(_.sasshi).getOrElse(0) + rlT.sasshi.getOrElse(0) + psTs.foldLeft(0)(_ + _.sasshi.getOrElse(0)),
+        koui = csT.flatMap(_.koui).getOrElse(0) + tyT.flatMap(_.koui).getOrElse(0) + rlT.koui.getOrElse(0) + psTs.foldLeft(0)(_ + _.koui.getOrElse(0)),
+        akui = csT.flatMap(_.akui).getOrElse(0) + tyT.flatMap(_.akui).getOrElse(0) + rlT.akui.getOrElse(0) + psTs.foldLeft(0)(_ + _.akui.getOrElse(0))
+      )
+    }
     val classTalentMap = Map(
       0 -> M.Talent.preset(3, 1, 1, 1, 1, 1, 1, 1),
       1 -> M.Talent.preset(3, 2, 2, 2, 1, 0, 0, 0),
@@ -42,6 +109,8 @@ object TalentTable {
     def render(p: Prop): ReactElement = {
       val classTalent = p.csClass.flatMap(c => classTalentMap.get(c))
       val typeTalent = p.csType.flatMap(c => typeTalentMap.get(c))
+      val relTalent = calculateRelationTalent(p.relations)
+      val totalTalent = calculateTotalTalent(classTalent, typeTalent, relTalent, p.parts)
       <.div(
         ^.classSet("box" -> true),
         <.h2("資質・傾き・慎み"),
@@ -89,6 +158,76 @@ object TalentTable {
               )
             ),
             <.tbody(
+              <.tr(
+                <.th("総計："),
+                <.td(
+                  <.input(
+                    ^.`type` := "text",
+                    ^.classSet("shihai" -> true),
+                    ^.value := totalTalent.shihai.map(_.toString).getOrElse(""),
+                    ^.readOnly := true
+                  )
+                ),
+                <.td(
+                  <.input(
+                    ^.`type` := "text",
+                    ^.classSet("jyujyun" -> true),
+                    ^.value := totalTalent.jyujyun.map(_.toString).getOrElse(""),
+                    ^.readOnly := true
+                  )
+                ),
+                <.td(
+                  <.input(
+                    ^.`type` := "text",
+                    ^.classSet("dasan" -> true),
+                    ^.value := totalTalent.dasan.map(_.toString).getOrElse(""),
+                    ^.readOnly := true
+                  )
+                ),
+                <.td(
+                  <.input(
+                    ^.`type` := "text",
+                    ^.classSet("jyunshin" -> true),
+                    ^.value := totalTalent.jyunshin.map(_.toString).getOrElse(""),
+                    ^.readOnly := true
+                  )
+                ),
+                <.td(
+                  <.input(
+                    ^.`type` := "text",
+                    ^.classSet("oshi" -> true),
+                    ^.value := totalTalent.oshi.map(_.toString).getOrElse(""),
+                    ^.readOnly := true
+                  )
+                ),
+                <.td(
+                  <.input(
+                    ^.`type` := "text",
+                    ^.classSet("sasshi" -> true),
+                    ^.value := totalTalent.sasshi.map(_.toString).getOrElse(""),
+                    ^.readOnly := true
+                  )
+                ),
+                <.td(
+                  <.input(
+                    ^.`type` := "text",
+                    ^.classSet("koui" -> true),
+                    ^.value := totalTalent.koui.map(_.toString).getOrElse(""),
+                    ^.readOnly := true
+                  )
+                ),
+                <.td(
+                  <.input(
+                    ^.`type` := "text",
+                    ^.classSet("akui" -> true),
+                    ^.value := totalTalent.akui.map(_.toString).getOrElse(""),
+                    ^.readOnly := true
+                  )
+                ),
+                <.td(
+                  ^.classSet("noborder" -> true)
+                )
+              ),
               <.tr(
                 <.th("クラス："),
                 <.td(
@@ -235,6 +374,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("shihai" -> true),
+                    ^.value := relTalent.shihai.map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -242,6 +382,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("jyujyun" -> true),
+                    ^.value := relTalent.jyujyun.map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -249,6 +390,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("dasan" -> true),
+                    ^.value := relTalent.dasan.map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -256,6 +398,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("jyunshin" -> true),
+                    ^.value := relTalent.jyunshin.map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -263,6 +406,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("oshi" -> true),
+                    ^.value := relTalent.oshi.map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -270,6 +414,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("sasshi" -> true),
+                    ^.value := relTalent.sasshi.map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -277,6 +422,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("koui" -> true),
+                    ^.value := relTalent.koui.map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -284,6 +430,7 @@ object TalentTable {
                   <.input(
                     ^.`type` := "text",
                     ^.classSet("akui" -> true),
+                    ^.value := relTalent.akui.map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
                 ),
@@ -305,74 +452,83 @@ object TalentTable {
                   ^.classSet("noborder" -> true)
                 )
               ),
-              (if(p.parts.isEmpty) Seq(M.Part("", M.Talent.default)) else p.parts).map{ part =>
+              p.parts.toList.map{ case (index, part) =>
                 <.tr(
                   <.td(
                     <.input(
                       ^.`type` := "text",
-                      ^.value := part.name
+                      ^.value := part.name,
+                      ^.onChange ==> onChange(index, (p, v) => p.copy(name = v))_
                     )
                   ),
                   <.td(
                     <.input(
                       ^.`type` := "text",
                       ^.classSet("shihai" -> true),
-                      ^.value := part.talent.shihai
+                      ^.value := part.talent.shihai.map(_.toString).getOrElse(""),
+                      ^.onChange ==> onChange(index, (p, v) => p.copy(talent = p.talent.copy(shihai = util.toIntOpt(v))))_
                     )
                   ),
                   <.td(
                     <.input(
                       ^.`type` := "text",
                       ^.classSet("jyujyun" -> true),
-                      ^.value := part.talent.jyujyun
+                      ^.value := part.talent.jyujyun.map(_.toString).getOrElse(""),
+                      ^.onChange ==> onChange(index, (p, v) => p.copy(talent = p.talent.copy(jyujyun = util.toIntOpt(v))))_
                     )
                   ),
                   <.td(
                     <.input(
                       ^.`type` := "text",
                       ^.classSet("dasan" -> true),
-                      ^.value := part.talent.dasan
+                      ^.value := part.talent.dasan.map(_.toString).getOrElse(""),
+                      ^.onChange ==> onChange(index, (p, v) => p.copy(talent = p.talent.copy(dasan = util.toIntOpt(v))))_
                     )
                   ),
                   <.td(
                     <.input(
                       ^.`type` := "text",
                       ^.classSet("jyunshin" -> true),
-                      ^.value := part.talent.jyunshin
+                      ^.value := part.talent.jyunshin.map(_.toString).getOrElse(""),
+                      ^.onChange ==> onChange(index, (p, v) => p.copy(talent = p.talent.copy(jyunshin = util.toIntOpt(v))))_
                     )
                   ),
                   <.td(
                     <.input(
                       ^.`type` := "text",
                       ^.classSet("oshi" -> true),
-                      ^.value := part.talent.oshi
+                      ^.value := part.talent.oshi.map(_.toString).getOrElse(""),
+                      ^.onChange ==> onChange(index, (p, v) => p.copy(talent = p.talent.copy(oshi = util.toIntOpt(v))))_
                     )
                   ),
                   <.td(
                     <.input(
                       ^.`type` := "text",
                       ^.classSet("sasshi" -> true),
-                      ^.value := part.talent.sasshi
+                      ^.value := part.talent.sasshi.map(_.toString).getOrElse(""),
+                      ^.onChange ==> onChange(index, (p, v) => p.copy(talent = p.talent.copy(sasshi = util.toIntOpt(v))))_
                     )
                   ),
                   <.td(
                     <.input(
                       ^.`type` := "text",
                       ^.classSet("koui" -> true),
-                      ^.value := part.talent.koui
+                      ^.value := part.talent.koui.map(_.toString).getOrElse(""),
+                      ^.onChange ==> onChange(index, (p, v) => p.copy(talent = p.talent.copy(koui = util.toIntOpt(v))))_
                     )
                   ),
                   <.td(
                     <.input(
                       ^.`type` := "text",
                       ^.classSet("akui" -> true),
-                      ^.value := part.talent.akui
+                      ^.value := part.talent.akui.map(_.toString).getOrElse(""),
+                      ^.onChange ==> onChange(index, (p, v) => p.copy(talent = p.talent.copy(akui = util.toIntOpt(v))))_
                     )
                   ),
                   <.td(
                     ^.classSet("noborder" -> true),
                     <.button(
-                      ^.classSet("deleteRow" -> true),
+                      ^.onClick --> deleteRow(index),
                       "削除"
                     )
                   )
@@ -381,17 +537,18 @@ object TalentTable {
             )
           ),
           <.button(
-            ^.classSet("addPart" -> true),
+            ^.onClick --> addRow,
             "行追加"
           )
         )
       )
     }
   }
-  def component() = {
+  def component(pScope: BackendScope[Unit, M.App]) = {
     ReactComponentB[TalentTable.Prop]("TalentTable")
       .stateless
-      .renderBackend[TalentTable.Backend]
+      .backend(scope => new TalentTable.Backend(scope, pScope))
+      .renderBackend
       .build
   }
 }
