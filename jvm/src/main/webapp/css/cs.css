@@ -44,6 +44,13 @@ div.tension {
   width: 30px;
   height: 30px;
   vertical-align: top;
+  margin: 2px;
+}
+div.checked {
+  background-color: #FFD700;
+}
+div.used {
+  background-color: #333333;
 }
 .hiddenRow {
   display: none;

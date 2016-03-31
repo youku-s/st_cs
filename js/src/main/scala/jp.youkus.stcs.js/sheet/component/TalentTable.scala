@@ -452,7 +452,7 @@ object TalentTable {
                   ^.classSet("noborder" -> true)
                 )
               ),
-              p.parts.toList.map{ case (index, part) =>
+              p.parts.toList.sortBy(_._1).map{ case (index, part) =>
                 <.tr(
                   <.td(
                     <.input(

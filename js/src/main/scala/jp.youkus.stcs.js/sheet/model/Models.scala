@@ -10,7 +10,7 @@ case class App(
   items: Map[Int, Item],
   skills: Map[Int, Skill],
   relations: Map[Int, Relation],
-  tensions: Seq[Tension],
+  tensions: Map[Int, Tension],
   memo: String
 )
 
@@ -60,32 +60,31 @@ case class Relation(
 )
 case class Tension(
   number: Option[Int],
-  ckecked: Boolean,
-  used: Boolean
+  status: Int
 )
 
 object Tension {
-  def initial = Seq(
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(Some(5), false, false),
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(Some(10), false, false),
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(Some(15), false, false),
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(None, false, false),
-    Tension(Some(20), false, false)
+  def initial = Map(
+    0 -> Tension(None, 0),
+    1 -> Tension(None, 0),
+    2 -> Tension(None, 0),
+    3 -> Tension(None, 0),
+    4 -> Tension(Some(5), 0),
+    5 -> Tension(None, 0),
+    6 -> Tension(None, 0),
+    7 -> Tension(None, 0),
+    8 -> Tension(None, 0),
+    9 -> Tension(Some(10), 0),
+    10 -> Tension(None, 0),
+    11 -> Tension(None, 0),
+    12 -> Tension(None, 0),
+    13 -> Tension(None, 0),
+    14 -> Tension(Some(15), 0),
+    15 -> Tension(None, 0),
+    16 -> Tension(None, 0),
+    17 -> Tension(None, 0),
+    18 -> Tension(None, 0),
+    19 -> Tension(Some(20), 0)
   )
 }
 
