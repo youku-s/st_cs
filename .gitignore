@@ -6,3 +6,4 @@ jvm/src/main/webapp/js/*.js
 jvm/src/main/webapp/js/*.map
 project/project
 project/target
+*.swp

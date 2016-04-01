@@ -59,3 +59,7 @@ table.part {
   width: 600px;
   table-layout: fixed;
 }
+table.item {
+  width: 450px;
+  table-layout: fixed;
+}
