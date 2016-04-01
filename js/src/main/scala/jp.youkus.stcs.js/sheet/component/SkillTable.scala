@@ -97,4 +97,3 @@ object SkillTable {
       .build
   }
 }
-
