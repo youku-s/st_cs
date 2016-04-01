@@ -7,3 +7,4 @@ jvm/src/main/webapp/js/*.map
 project/project
 project/target
 *.swp
+application.conf

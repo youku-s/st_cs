@@ -1,0 +1,9 @@
+db.default {
+  driver="com.mysql.jdbc.Driver"
+  db.default.url="jdbc:mysql://localhost/st_cs"
+  user = "st_cs"
+  password = "st_cs"
+  poolInitialSize = 10
+  poolMaxSize = 20
+  connectionTimeoutMillis = 1000
+}

@@ -1,0 +1,20 @@
+<%@ val title: String %>
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8">
+		<title><%= title %></title>
+		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
+		<link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+		<link rel="stylesheet" type="text/css" href="css/cs.css">
+	</head>
+	<body>
+		<div id="main">
+		</div>
+		<script type="text/javascript" src="./js/stcs-jsdeps.js"></script>
+		<script type="text/javascript" src="./js/stcs-fastopt.js"></script>
+		<script type="text/javascript">
+			jp.youkus.stcs.js.sheet.Main().main();
+		</script>
+	</body>
+</html>
