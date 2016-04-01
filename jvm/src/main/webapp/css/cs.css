@@ -1,9 +1,17 @@
 * {
   font-size: 14px;
 }
+html, body {
+  height: 100%;
+}
+div#main {
+  height: 100%;
+}
 .box {
   margin: 10px;
   padding: 10px;
+  border: 1px solid #000000;
+  border-radius: 1em;
 }
 table {
   border-collapse: collapse;
@@ -70,4 +78,17 @@ table.skill {
 table.relation {
   width: 450px;
   table-layout: fixed;
+}
+.left {
+  width: 60%;
+  display: inline-block;
+}
+.right {
+  vertical-align: top;
+  height: 100%;
+  width: 40%;
+  display: inline-block;
+}
+.right > div.box {
+  height: 100%;
 }

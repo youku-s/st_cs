@@ -4,7 +4,7 @@ import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB}
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
-object CopyRight {
+object Footer {
   class Backend(scope: BackendScope[Unit, Unit]) {
     def render = {
       <.div(
@@ -20,9 +20,9 @@ object CopyRight {
     }
   }
   def component() = {
-    ReactComponentB[Unit]("CopyRight")
+    ReactComponentB[Unit]("Footer")
       .stateless
-      .renderBackend[CopyRight.Backend]
+      .renderBackend[Footer.Backend]
       .buildU
   }
 }
