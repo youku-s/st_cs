@@ -17,12 +17,12 @@ object Top {
     val itemTable = ItemTable.component(scope)
     val skillTable = SkillTable.component(scope)
     val relationTable = RelationTable.component(scope)
+    val password = Password.component(scope)
     val tag = Tag.component(scope)
     val footer = Footer.component()
     val memo = Memo.component(scope)
     def render(s: M.App): ReactElement = {
       <.div(
-        ^.style := js.Dictionary("height" -> "100%"),
         header(),
         <.div(
           ^.classSet("left" -> true),
@@ -36,6 +36,7 @@ object Top {
         ),
         <.div(
           ^.classSet("right" -> true),
+          password(Password.Prop(s.password, s.display)),
           tag(Tag.Prop(s.tags))
         ),
         footer()

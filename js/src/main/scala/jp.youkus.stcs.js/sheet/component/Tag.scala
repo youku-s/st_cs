@@ -47,7 +47,7 @@ object Tag {
         <.h2("タグ"),
         <.div(
           <.div(
-            "ここに入力してEnterを押すとタグが作成されます",
+            "入力してEnterを押すとタグが作成されます",
             <.input(
               ^.`type` := "text",
               ^.value := s,

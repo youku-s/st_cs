@@ -7,7 +7,10 @@ import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 object Header {
   class Backend(scope: BackendScope[Unit, Unit]) {
     def render = {
-      <.h1("少女展爛会キャラクターシート")
+      <.div(
+        ^.classSet("header" -> true),
+        <.h1("少女展爛会キャラクターシート")
+      )
     }
   }
   def component() = {

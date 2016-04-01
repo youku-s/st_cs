@@ -8,7 +8,7 @@ object Footer {
   class Backend(scope: BackendScope[Unit, Unit]) {
     def render = {
       <.div(
-        ^.classSet("box" -> true),
+        ^.classSet("footer" -> true),
         "「",
         <.a(
           ^.href := "http://www6.plala.or.jp/scrafts/glexb/",

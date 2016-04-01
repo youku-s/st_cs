@@ -12,7 +12,8 @@ case class App(
   tensions: Map[Int, Tension],
   memo: String,
   password: Option[String],
-  tags: Map[Int, String]
+  tags: Map[Int, String],
+  display: Boolean
 )
 case class Part(
   name: String,
@@ -106,6 +107,7 @@ object App {
     tensions = Tension.initial,
     memo = "",
     password = None,
-    tags = Map.empty
+    tags = Map.empty,
+    display = true
   )
 }
