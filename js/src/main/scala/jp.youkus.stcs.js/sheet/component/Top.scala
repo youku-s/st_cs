@@ -16,6 +16,7 @@ object Top {
     val itemTable = ItemTable.component(scope)
     val skillTable = SkillTable.component(scope)
     val relationTable = RelationTable.component(scope)
+    val copyRight = CopyRight.component()
     val memo = Memo.component(scope)
     def render(s: M.App): ReactElement = {
       <.div(
@@ -27,7 +28,8 @@ object Top {
         itemTable(ItemTable.Prop(s.items)),
         skillTable(SkillTable.Prop(s.skills)),
         relationTable(RelationTable.Prop(s.relations)),
-        memo(Memo.Prop(s.memo))
+        memo(Memo.Prop(s.memo)),
+        copyRight()
       )
     }
   }

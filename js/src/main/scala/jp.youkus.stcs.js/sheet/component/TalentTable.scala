@@ -71,16 +71,19 @@ object TalentTable {
       M.Talent.preset(shihai, jyujyun, dasan, jyunshin, oshi, sasshi, 0, 0)
     }
     def calculateTotalTalent(csT: Option[M.Talent], tyT: Option[M.Talent], rlT: M.Talent, parts: Map[Int, M.Part]): M.Talent = {
-      val psTs = parts.values.map(_.talent)
+      val psTs = parts.values.map(_.talent).toSeq
+      def calc(csT: Option[M.Talent], tyT: Option[M.Talent], rlT: M.Talent, psTs: Seq[M.Talent])(f: M.Talent => Option[Int]): Int = {
+        csT.flatMap(f).getOrElse(0) + tyT.flatMap(f).getOrElse(0) + f(rlT).getOrElse(0) + psTs.foldLeft(0)(_ + f(_).getOrElse(0))
+      }
       M.Talent.preset(
-        shihai = csT.flatMap(_.shihai).getOrElse(0) + tyT.flatMap(_.shihai).getOrElse(0) + rlT.shihai.getOrElse(0) + psTs.foldLeft(0)(_ + _.shihai.getOrElse(0)),
-        jyujyun = csT.flatMap(_.jyujyun).getOrElse(0) + tyT.flatMap(_.jyujyun).getOrElse(0) + rlT.jyujyun.getOrElse(0) + psTs.foldLeft(0)(_ + _.jyujyun.getOrElse(0)),
-        dasan = csT.flatMap(_.dasan).getOrElse(0) + tyT.flatMap(_.dasan).getOrElse(0) + rlT.dasan.getOrElse(0) + psTs.foldLeft(0)(_ + _.dasan.getOrElse(0)),
-        jyunshin = csT.flatMap(_.jyunshin).getOrElse(0) + tyT.flatMap(_.jyunshin).getOrElse(0) + rlT.jyunshin.getOrElse(0) + psTs.foldLeft(0)(_ + _.jyunshin.getOrElse(0)),
-        oshi = csT.flatMap(_.oshi).getOrElse(0) + tyT.flatMap(_.oshi).getOrElse(0) + rlT.oshi.getOrElse(0) + psTs.foldLeft(0)(_ + _.oshi.getOrElse(0)),
-        sasshi = csT.flatMap(_.sasshi).getOrElse(0) + tyT.flatMap(_.sasshi).getOrElse(0) + rlT.sasshi.getOrElse(0) + psTs.foldLeft(0)(_ + _.sasshi.getOrElse(0)),
-        koui = csT.flatMap(_.koui).getOrElse(0) + tyT.flatMap(_.koui).getOrElse(0) + rlT.koui.getOrElse(0) + psTs.foldLeft(0)(_ + _.koui.getOrElse(0)),
-        akui = csT.flatMap(_.akui).getOrElse(0) + tyT.flatMap(_.akui).getOrElse(0) + rlT.akui.getOrElse(0) + psTs.foldLeft(0)(_ + _.akui.getOrElse(0))
+        shihai = calc(csT, tyT, rlT, psTs)(_.shihai),
+        jyujyun = calc(csT, tyT, rlT, psTs)(_.jyujyun),
+        dasan = calc(csT, tyT, rlT, psTs)(_.dasan),
+        jyunshin = calc(csT, tyT, rlT, psTs)(_.jyunshin),
+        oshi = calc(csT, tyT, rlT, psTs)(_.oshi),
+        sasshi = calc(csT, tyT, rlT, psTs)(_.sasshi),
+        koui = calc(csT, tyT, rlT, psTs)(_.koui),
+        akui = calc(csT, tyT, rlT, psTs)(_.akui)
       )
     }
     val classTalentMap = Map(
