@@ -14,6 +14,7 @@ object Top {
     val talentTable = TalentTable.component(scope)
     val tensionGage = TensionGage.component(scope)
     val itemTable = ItemTable.component(scope)
+    val skillTable = SkillTable.component(scope)
     def render(s: M.App): ReactElement = {
       <.div(
         ^.style := js.Dictionary("width" -> "80%"),
@@ -21,7 +22,8 @@ object Top {
         baseTable(BaseTable.Prop(s.name, s.csClass, s.csType, s.csEaude)),
         talentTable(TalentTable.Prop(s.csClass, s.csType, s.relations, s.parts)),
         tensionGage(TensionGage.Prop(s.tensions)),
-        itemTable(ItemTable.Prop(s.items))
+        itemTable(ItemTable.Prop(s.items)),
+        skillTable(SkillTable.Prop(s.skills))
       )
     }
   }

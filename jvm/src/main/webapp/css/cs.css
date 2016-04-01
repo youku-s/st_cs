@@ -63,3 +63,7 @@ table.item {
   width: 450px;
   table-layout: fixed;
 }
+table.skill {
+  width: 600px;
+  table-layout: fixed;
+}

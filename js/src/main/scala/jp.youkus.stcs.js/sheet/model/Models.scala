@@ -97,7 +97,12 @@ object App {
     csEaude = None,
     parts = Map(0 -> Part("", Talent.default)),
     items = Map(0 -> Item("", None, None)),
-    skills = Map(0 -> Skill("", "", None, "")),
+    skills = Map(
+      0 -> Skill("", "", None, ""),
+      1 -> Skill("", "", None, ""),
+      2 -> Skill("", "", None, ""),
+      3 -> Skill("", "", None, "")
+    ),
     relations = Map(0 -> Relation("", "", None, None)),
     tensions = Tension.initial,
     memo = ""
