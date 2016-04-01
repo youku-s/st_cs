@@ -2,7 +2,6 @@ package jp.youkus.stcs.js.sheet.model
 
 case class App(
   name: String,
-  playerName: String,
   csClass: Option[Int],
   csType: Option[Int],
   csEaude: Option[Int],
@@ -11,9 +10,10 @@ case class App(
   skills: Map[Int, Skill],
   relations: Map[Int, Relation],
   tensions: Map[Int, Tension],
-  memo: String
+  memo: String,
+  password: Option[String],
+  tags: Map[Int, String]
 )
-
 case class Part(
   name: String,
   talent: Talent
@@ -91,7 +91,6 @@ object Tension {
 object App {
   def initialValue: App = App(
     name = "",
-    playerName = "",
     csClass = None,
     csType = None,
     csEaude = None,
@@ -105,6 +104,8 @@ object App {
     ),
     relations = Map(0 -> Relation("", "", None, None)),
     tensions = Tension.initial,
-    memo = ""
+    memo = "",
+    password = None,
+    tags = Map.empty
   )
 }

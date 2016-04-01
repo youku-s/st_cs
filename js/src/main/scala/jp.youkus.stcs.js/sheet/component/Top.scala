@@ -17,6 +17,7 @@ object Top {
     val itemTable = ItemTable.component(scope)
     val skillTable = SkillTable.component(scope)
     val relationTable = RelationTable.component(scope)
+    val tag = Tag.component(scope)
     val footer = Footer.component()
     val memo = Memo.component(scope)
     def render(s: M.App): ReactElement = {
@@ -34,7 +35,8 @@ object Top {
           memo(Memo.Prop(s.memo))
         ),
         <.div(
-          ^.classSet("right" -> true)
+          ^.classSet("right" -> true),
+          tag(Tag.Prop(s.tags))
         ),
         footer()
       )
