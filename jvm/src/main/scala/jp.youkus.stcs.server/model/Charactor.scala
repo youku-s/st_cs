@@ -48,6 +48,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
       select.from(Charactor as c)
         .where
           .eq(c.display, true)
+        .orderBy(c.updateDate)
         .limit(limit)
         .offset(offset)
     }.map(Charactor(c.resultName)).list().apply()
@@ -87,7 +88,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
         hashed,
         display,
         createDate,
-        None
+        Some(createDate)
       )
     }.update.apply()
     Charactor(
@@ -100,7 +101,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
       password = hashed,
       display = display,
       createDate = createDate,
-      updateDate = None
+      updateDate = Some(createDate)
     )
   }
   def updateDetail(
@@ -112,48 +113,24 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
     memo: String,
     display: Boolean,
     password: Option[String]
-  )(implicit session: DBSession): Boolean = {
-    val count = withSQL {
+  )(implicit session: DBSession): Charactor = {
+    withSQL {
       update(Charactor).set(
         Charactor.column.name -> name,
         Charactor.column.csClass -> csClass,
         Charactor.column.csType -> csType,
         Charactor.column.csEaude -> csEaude,
         Charactor.column.memo -> memo,
+        Charactor.column.password -> password.map(toHash),
+        Charactor.column.display -> display,
         Charactor.column.updateDate -> Some(DateTime.now)
-      ).where
-        .eq(Charactor.column.id, id)
-        .withRoundBracket { s =>
-          s.eq(Charactor.column.password, password.map(toHash))
-          .or
-          .isNull(Charactor.column.password)
-        }
+      ).where.eq(Charactor.column.id, id)
     }.update.apply()
-    count > 0
+    find(id).get
   }
-  def updatePassword(id: String, newPassword: Option[String], oldPassword: Option[String])(implicit session: DBSession): Boolean = {
-    val count = withSQL {
-      update(Charactor).set(
-        Charactor.column.password -> newPassword.map(toHash),
-        Charactor.column.updateDate -> Some(DateTime.now)
-      ).where
-        .eq(Charactor.column.id, id)
-        .withRoundBracket { s =>
-          s.eq(Charactor.column.password, oldPassword.map(toHash))
-          .or
-          .isNull(Charactor.column.password)
-        }
-    }.update.apply()
-    count > 0
-  }
-  def removeWithPassword(id: String, password: Option[String])(implicit session: DBSession): Boolean = {
+  def remove(id: String)(implicit session: DBSession): Boolean = {
     val count = withSQL {
       delete.from(Charactor).where.eq(Charactor.column.id, id)
-        .withRoundBracket { s =>
-          s.eq(Charactor.column.password, password.map(toHash))
-          .or
-          .isNull(Charactor.column.password)
-        }
     }.update.apply()
     count > 0
   }

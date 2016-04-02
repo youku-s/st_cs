@@ -55,7 +55,7 @@ object Tension extends SQLSyntaxSupport[Tension] {
       sort = sort
     )
   }
-  def removeWithCid(cid: String)(implicit session: DBSession): Boolean = {
+  def removeByCid(cid: String)(implicit session: DBSession): Boolean = {
     val count = withSQL {
       delete.from(Tension).where.eq(Tension.column.cid, cid)
     }.update.apply()

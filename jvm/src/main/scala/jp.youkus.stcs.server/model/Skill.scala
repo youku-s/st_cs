@@ -67,7 +67,7 @@ object Skill extends SQLSyntaxSupport[Skill] {
       sort = sort
     )
   }
-  def removeWithCid(cid: String)(implicit session: DBSession): Boolean = {
+  def removeByCid(cid: String)(implicit session: DBSession): Boolean = {
     val count = withSQL {
       delete.from(Skill).where.eq(Skill.column.cid, cid)
     }.update.apply()

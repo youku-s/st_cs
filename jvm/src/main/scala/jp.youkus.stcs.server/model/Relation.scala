@@ -67,7 +67,7 @@ object Relation extends SQLSyntaxSupport[Relation] {
       sort = sort
     )
   }
-  def removeWithCid(cid: String)(implicit session: DBSession): Boolean = {
+  def removeByCid(cid: String)(implicit session: DBSession): Boolean = {
     val count = withSQL {
       delete.from(Relation).where.eq(Relation.column.cid, cid)
     }.update.apply()
