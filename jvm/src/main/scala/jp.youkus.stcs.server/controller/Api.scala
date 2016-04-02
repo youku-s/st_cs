@@ -22,6 +22,9 @@ class Api extends ScalatraServlet with JacksonJsonSupport {
   post("/sheet/:id") {
     Ok()
   }
+  delete("/sheet/:id") {
+    Ok()
+  }
   get("/sheets") {
     Ok()
   }

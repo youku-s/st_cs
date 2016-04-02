@@ -1,9 +1,12 @@
 db.default {
   driver="com.mysql.jdbc.Driver"
-  db.default.url="jdbc:mysql://localhost/st_cs"
+  url="jdbc:mysql://localhost/st_cs"
   user = "st_cs"
   password = "st_cs"
-  poolInitialSize = 10
-  poolMaxSize = 20
-  connectionTimeoutMillis = 1000
 }
+
+scalikejdbc.global.loggingSQLAndTime.enabled=true
+scalikejdbc.global.loggingSQLAndTime.singleLineMode=true
+
+dbplugin=disabled
+evolutionplugin=disabled
