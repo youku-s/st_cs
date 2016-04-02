@@ -11,27 +11,26 @@ import japgolly.scalajs.react.ReactDOM
 import upickle.default.read
 
 import jp.youkus.stcs.js.sheet.{component => C}
+import jp.youkus.stcs.shared.json
 
-@JSExport
-object Main extends JSApp {
+object Main {
   def main(): Unit = {
   }
-  @JSExport
   def render(id: String): Unit = {
     if (id.isEmpty) {
       val top = C.Top.component(None)
       ReactDOM.render(top(), document.getElementById("main"))
     } else {
       import scala.concurrent.ExecutionContext.Implicits.global
-      Ajax.get(s"/api/sheet/${id}")
-        .onSuccess { case xhr =>
-          val top = C.Top.component(Some(read(xhr.responseText)))
-          ReactDOM.render(top(), document.getElementById("main"))
-        }
-        .onFailure { case _ =>
-          val top = C.Top.component(None)
-          ReactDOM.render(top(), document.getElementById("main"))
-        }
+      val f = Ajax.get(s"/api/sheet/${id}")
+      f.onSuccess { case xhr =>
+        val top = C.Top.component(Some(read[json.Sheet](xhr.responseText)))
+        ReactDOM.render(top(), document.getElementById("main"))
+      }
+      f.onFailure { case _ =>
+        val top = C.Top.component(None)
+        ReactDOM.render(top(), document.getElementById("main"))
+      }
     }
   }
 }
