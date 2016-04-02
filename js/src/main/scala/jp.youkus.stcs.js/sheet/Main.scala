@@ -13,8 +13,10 @@ import jp.youkus.stcs.js.sheet.{component => C}
 @JSExport
 object Main extends JSApp {
   val top = C.Top.component()
+  def main(): Unit = {
+  }
   @JSExport
-  override def main(): Unit = {
+  def render(id: String): Unit = {
     ReactDOM.render(top(), document.getElementById("main"))
   }
 }
