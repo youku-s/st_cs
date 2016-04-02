@@ -71,6 +71,9 @@ object Password {
           ^.classSet("row" -> true),
           <.button(
             "保存する"
+          ),
+          <.button(
+            "削除する"
           )
         )
       )

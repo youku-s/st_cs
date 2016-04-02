@@ -1,4 +1,4 @@
-package jp.youkus.stcs.server.model
+package jp.youkus.stcs.shared.model
 
 import scalikejdbc.{DBSession, ResultName, SQLSyntaxSupport, WrappedResultSet, insert, select, delete, withSQL}
 

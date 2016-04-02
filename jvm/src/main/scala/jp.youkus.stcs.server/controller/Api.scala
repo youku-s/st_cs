@@ -1,19 +1,14 @@
 package jp.youkus.stcs.server.controller
 
-import org.json4s.jackson.JsonMethods
-import org.json4s.{DefaultFormats, Formats}
-import org.scalatra.json.JacksonJsonSupport
 import org.scalatra.{ActionResult, BadRequest, NotFound, Ok, ScalatraServlet}
-
 import scalikejdbc.DB
+import upickle.default._
 
-import jp.youkus.stcs.server.json
-import jp.youkus.stcs.server.model
+import jp.youkus.stcs.shared.{json, model}
 
-class Api extends ScalatraServlet with JacksonJsonSupport with ErrorHandler {
-  protected implicit val jsonFormats: Formats = DefaultFormats
+class Api extends ScalatraServlet with ErrorHandler {
   before() {
-    contentType = formats("json")
+    contentType = "application/json"
   }
   after() {
     response.setHeader("Cache-Control", "no-cache")
@@ -21,7 +16,7 @@ class Api extends ScalatraServlet with JacksonJsonSupport with ErrorHandler {
   post("/sheet") {
     val ret = for {
       jd <- required(params.get("q")).right
-      sheet <- withoutError(JsonMethods.parse(jd).extract[json.Sheet]).right
+      sheet <- withoutError(read[json.Sheet](jd)).right
     } yield {
       DB.localTx { implicit session =>
         val charactor = model.Charactor.create(
@@ -98,7 +93,7 @@ class Api extends ScalatraServlet with JacksonJsonSupport with ErrorHandler {
           )
           json.Sort(sort, t)
         }
-        Ok(json.Sheet(charactor, parts, items, skills, relations, tensions, tags))
+        Ok(write(json.Sheet(charactor, parts, items, skills, relations, tensions, tags)))
       }
     }
     ret.merge
@@ -115,7 +110,7 @@ class Api extends ScalatraServlet with JacksonJsonSupport with ErrorHandler {
         val relations = model.Relation.findByCid(id).map(x => json.Sort(x.sort, json.Relation(x)))
         val tensions = model.Tension.findByCid(id).map(x => json.Sort(x.sort, json.Tension(x)))
         val tags = model.Tag.findByCid(id).map(x => json.Sort(x.sort, x.name))
-        Ok(json.Sheet(charactor, parts, items, skills, relations, tensions, tags))
+        Ok(write(json.Sheet(charactor, parts, items, skills, relations, tensions, tags)))
       }
     }
     ret.merge
@@ -124,7 +119,7 @@ class Api extends ScalatraServlet with JacksonJsonSupport with ErrorHandler {
     val ret = for {
       id <- required(params.get("id")).right
       jd <- required(params.get("q")).right
-      sheet <- withoutError(JsonMethods.parse(jd).extract[json.Sheet]).right
+      sheet <- withoutError(read[json.Sheet](jd)).right
       charactor <- found(DB.readOnly { implicit s => model.Charactor.find(id) }).right
       _ <- required(charactor.password == sheet.password.map(model.Charactor.toHash)).right
     } yield {
@@ -210,7 +205,7 @@ class Api extends ScalatraServlet with JacksonJsonSupport with ErrorHandler {
           )
           json.Sort(sort, t)
         }
-        Ok(json.Sheet(updated, parts, items, skills, relations, tensions, tags))
+        Ok(write(json.Sheet(updated, parts, items, skills, relations, tensions, tags)))
       }
     }
     ret.merge
@@ -219,7 +214,7 @@ class Api extends ScalatraServlet with JacksonJsonSupport with ErrorHandler {
     val ret = for {
       id <- required(params.get("id")).right
       jd <- required(params.get("q")).right
-      sheet <- withoutError(JsonMethods.parse(jd).extract[json.Sheet]).right
+      sheet <- withoutError(read[json.Sheet](jd)).right
       charactor <- found(DB.readOnly { implicit s => model.Charactor.find(id) }).right
       _ <- required(charactor.password == sheet.password.map(model.Charactor.toHash)).right
     } yield {

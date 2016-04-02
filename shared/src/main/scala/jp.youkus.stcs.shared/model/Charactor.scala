@@ -1,4 +1,4 @@
-package jp.youkus.stcs.server.model
+package jp.youkus.stcs.shared.model
 
 import org.joda.time.DateTime
 import scalikejdbc.{DBSession, ResultName, SQLSyntaxSupport, WrappedResultSet, insert, select, update, delete, withSQL, sqls}

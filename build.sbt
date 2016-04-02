@@ -27,15 +27,15 @@ lazy val root = (crossProject in file("."))
       "org.scalikejdbc" %% "scalikejdbc-config"  % "2.3.5",
       "ch.qos.logback"  %  "logback-classic"     % "1.1.3",
       "mysql" % "mysql-connector-java" % "5.1.38",
-      "org.json4s" %% "json4s-ext" % "3.3.0",
-      "org.json4s" %% "json4s-jackson" % "3.3.0"
+      "com.lihaoyi" %% "upickle" % "0.3.9"
     )
   )
   .jvmSettings(jetty(): _*)
   .jsSettings(
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "0.8.2",
-      "com.github.japgolly.scalajs-react" %%% "core" % "0.10.4"
+      "com.github.japgolly.scalajs-react" %%% "core" % "0.10.4",
+      "com.lihaoyi" %% "upickle" % "0.3.9"
     ),
     jsDependencies ++= Seq(
       "org.webjars.bower" % "react" % "0.14.3"
@@ -44,5 +44,20 @@ lazy val root = (crossProject in file("."))
         / "react-dom.js" minified "react-dom.min.js" dependsOn "react-with-addons.js" commonJSName "ReactDOM"
     )
   )
+lazy val shared = project
+  .settings(
+    organization := "jp.youkus",
+    name := "stcs_share",
+    version := "0.1.0",
+    scalaVersion := "2.11.7",
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
+    ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
+    libraryDependencies ++= Seq(
+      "org.scalikejdbc" %% "scalikejdbc"         % "2.3.5",
+      "org.scalikejdbc" %% "scalikejdbc-config"  % "2.3.5"
+    )
+  )
 lazy val jvm = root.jvm
+  .dependsOn(shared)
 lazy val js = root.js
+  .dependsOn(shared)

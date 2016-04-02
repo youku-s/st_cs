@@ -1,4 +1,4 @@
-package jp.youkus.stcs.server.json
+package jp.youkus.stcs.shared.json
 
 case class SearchResult[A](
   result: Seq[A],

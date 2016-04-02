@@ -5,7 +5,7 @@ import org.scalatra.scalate.ScalateSupport
 
 import scalikejdbc.DB
 
-import jp.youkus.stcs.server.model.Charactor
+import jp.youkus.stcs.shared.model.Charactor
 
 class Sheet extends ScalatraServlet with ScalateSupport {
   get("/") {

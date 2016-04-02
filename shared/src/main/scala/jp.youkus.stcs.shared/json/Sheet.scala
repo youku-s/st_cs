@@ -1,6 +1,6 @@
-package jp.youkus.stcs.server.json
+package jp.youkus.stcs.shared.json
 
-import jp.youkus.stcs.server.model
+import jp.youkus.stcs.shared.model
 
 case class Sheet(
   name: String,
