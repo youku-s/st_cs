@@ -1,5 +1,7 @@
 package jp.youkus.stcs.js.sheet.model
 
+import jp.youkus.stcs.shared.json
+
 case class App(
   id: Option[String],
   name: String,
@@ -20,6 +22,21 @@ case class Part(
   name: String,
   talent: Talent
 )
+object Part {
+  def apply(part: json.Part): Part = Part(
+    name = part.name,
+    talent = Talent(
+      shihai = part.shihai,
+      jyujyun = part.jyujyun,
+      dasan = part.dasan,
+      jyunshin = part.jyunshin,
+      oshi = part.oshi,
+      sasshi = part.sasshi,
+      koui = part.koui,
+      akui = part.akui
+    )
+  )
+}
 case class Talent(
   shihai: Option[Int],
   jyujyun: Option[Int],
@@ -48,24 +65,50 @@ case class Item(
   main: Option[Int],
   sub: Option[Int]
 )
+object Item {
+  def apply(item: json.Item): Item = Item(
+    name = item.name,
+    main = item.main,
+    sub = item.sub
+  )
+}
 case class Skill(
   name: String,
   timing: String,
   cost: Option[Int],
   detail: String
 )
+object Skill {
+  def apply(skill: json.Skill): Skill = Skill(
+    name = skill.name,
+    timing = skill.timing,
+    cost = skill.cost,
+    detail = skill.detail
+  )
+}
 case class Relation(
   to: String,
   name: String,
   ueshita: Option[Int],
   semeuke: Option[Int]
 )
+object Relation {
+  def apply(relation: json.Relation): Relation = Relation(
+    to = relation.to,
+    name = relation.name,
+    ueshita = relation.ueshita,
+    semeuke = relation.semeuke
+  )
+}
 case class Tension(
   number: Option[Int],
   status: Int
 )
-
 object Tension {
+  def apply(tension: json.Tension): Tension = Tension(
+    number = tension.number,
+    status = tension.status
+  )
   def initial = Map(
     0 -> Tension(None, 0),
     1 -> Tension(None, 0),
@@ -111,5 +154,21 @@ object App {
     password = None,
     tags = Map.empty,
     display = true
+  )
+  def fromJson(sheet: json.Sheet): App = App(
+    id = sheet.id,
+    name = sheet.name,
+    csClass = sheet.csClass,
+    csType = sheet.csType,
+    csEaude = sheet.csEaude,
+    parts = sheet.parts.map{ case json.Sort(sort, part) => sort -> Part(part) }.toMap,
+    items = sheet.items.map{ case json.Sort(sort, item) => sort -> Item(item) }.toMap,
+    skills = sheet.skills.map{ case json.Sort(sort, skill) => sort -> Skill(skill) }.toMap,
+    relations = sheet.relations.map{ case json.Sort(sort, relation) => sort -> Relation(relation) }.toMap,
+    tensions = sheet.tensions.map{ case json.Sort(sort, tension) => sort -> Tension(tension) }.toMap,
+    memo = sheet.memo,
+    password = sheet.password,
+    tags = sheet.tags.map{ case json.Sort(sort, tag) => sort -> tag }.toMap,
+    display = sheet.display
   )
 }
