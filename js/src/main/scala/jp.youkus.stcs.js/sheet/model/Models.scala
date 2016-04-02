@@ -1,6 +1,7 @@
 package jp.youkus.stcs.js.sheet.model
 
 case class App(
+  id: Option[String],
   name: String,
   csClass: Option[Int],
   csType: Option[Int],
@@ -91,6 +92,7 @@ object Tension {
 
 object App {
   def initialValue: App = App(
+    id = None,
     name = "",
     csClass = None,
     csType = None,

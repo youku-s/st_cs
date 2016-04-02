@@ -6,6 +6,7 @@ import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactEle
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
+import jp.youkus.stcs.shared.json
 import jp.youkus.stcs.js.sheet.{model => M}
 
 object Top {
@@ -43,7 +44,7 @@ object Top {
       )
     }
   }
-  def component() = {
+  def component(sheet: Option[json.Sheet]) = {
     ReactComponentB[Unit]("Top")
       .initialState(M.App.initialValue)
       .renderBackend[Top.Backend]

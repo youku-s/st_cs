@@ -3,6 +3,7 @@ package jp.youkus.stcs.shared.json
 import jp.youkus.stcs.shared.model
 
 case class Sheet(
+  id: Option[String],
   name: String,
   csClass: Option[Int],
   csType: Option[Int],
@@ -27,6 +28,7 @@ object Sheet {
     tensions: Seq[Sort[Tension]],
     tags: Seq[Sort[String]]
   ): Sheet = Sheet(
+    id = Some(charactor.id),
     name = charactor.name,
     csClass = charactor.csClass,
     csType = charactor.csType,
