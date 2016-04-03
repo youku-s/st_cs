@@ -14,7 +14,6 @@ class Api extends ScalatraServlet with ErrorHandler {
     response.setHeader("Cache-Control", "no-cache")
   }
   post("/sheet") {
-    println(request.body)
     val ret = for {
       sheet <- withoutError(read[json.Sheet](request.body)).right
     } yield {
@@ -231,10 +230,12 @@ class Api extends ScalatraServlet with ErrorHandler {
   }
   get("/lists") {
     val ret = for {
-      search <- withoutError(read[json.Search](request.body)).right
+      jd <- required(params.get("q")).right
+      search <- withoutError(read[json.Search](jd)).right
     } yield {
       DB.readOnly { implicit session =>
         val (count, results) = model.Charactor.lists(search.limit, search.offset, search.tags)
+        println(results)
         val sheets = results.map { charactor =>
           val parts = model.Part.findByCid(charactor.id).map(x => json.Sort(x.sort, json.Part(x)))
           val items = model.Item.findByCid(charactor.id).map(x => json.Sort(x.sort, json.Item(x)))

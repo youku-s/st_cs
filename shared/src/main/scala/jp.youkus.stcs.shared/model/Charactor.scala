@@ -43,7 +43,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
     tags match {
       case None => {
         val count = withSQL {
-          select.from(Charactor as c)
+          select[Int](sqls.count).from(Charactor as c)
             .where
             .eq(c.display, true)
         }.map(rs => rs.int(1)).single.apply()
@@ -59,7 +59,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
       }
       case Some(ts) => {
         val count = withSQL {
-          select.from(Charactor as c)
+          select[Int](sqls.count).from(Charactor as c)
             .innerJoin(Tag as t).on(c.id, t.cid) 
             .where
               .eq(c.display, true)
