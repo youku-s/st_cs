@@ -26,7 +26,7 @@ object Main extends JSApp {
       import scala.concurrent.ExecutionContext.Implicits.global
       val f = Ajax.get(s"/api/sheet/${id}")
       f.onSuccess { case xhr =>
-        val top = C.Top.component(Some(read[json.Sheet](xhr.responseText)))
+        val top = C.Top.component(Some(read[json.response.Sheet](xhr.responseText)))
         ReactDOM.render(top(), document.getElementById("main"))
       }
       f.onFailure { case _ =>

@@ -16,7 +16,9 @@ case class Sheet(
   memo: String,
   password: Option[String],
   tags: Map[Int, String],
-  display: Boolean
+  display: Boolean,
+  updateDate: String,
+  usePassword: Boolean
 )
 case class Part(
   name: String,
@@ -185,9 +187,11 @@ object Sheet {
     memo = "",
     password = None,
     tags = Map.empty,
-    display = true
+    display = true,
+    usePassword = false,
+    updateDate = ""
   )
-  def fromJson(sheet: json.Sheet): Sheet = Sheet(
+  def fromJson(sheet: json.response.Sheet): Sheet = Sheet(
     id = sheet.id,
     name = sheet.name,
     csClass = sheet.csClass,
@@ -199,11 +203,13 @@ object Sheet {
     relations = sheet.relations.map{ case json.Sort(sort, relation) => sort -> Relation(relation) }.toMap,
     tensions = sheet.tensions.map{ case json.Sort(sort, tension) => sort -> Tension(tension) }.toMap,
     memo = sheet.memo,
-    password = sheet.password,
+    password = None,
+    usePassword = sheet.usePassword,
     tags = sheet.tags.map{ case json.Sort(sort, tag) => sort -> tag }.toMap,
-    display = sheet.display
+    display = sheet.display,
+    updateDate = sheet.updateDate
   )
-  def toJson(sheet: Sheet): json.Sheet = json.Sheet(
+  def toJson(sheet: Sheet): json.request.Sheet = json.request.Sheet(
     id = sheet.id,
     name = sheet.name,
     csClass = sheet.csClass,

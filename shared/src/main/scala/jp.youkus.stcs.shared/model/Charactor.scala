@@ -51,7 +51,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
           select.from(Charactor as c)
             .where
             .eq(c.display, true)
-            .orderBy(c.updateDate)
+            .orderBy(c.updateDate).desc
             .limit(limit)
             .offset(offset)
         }.map(Charactor(c.resultName)).list().apply()
@@ -73,7 +73,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
               .eq(c.display, true)
               .and
               .in(t.name, ts)
-            .orderBy(c.updateDate)
+            .orderBy(c.updateDate).desc
             .limit(limit)
             .offset(offset)
         }.map(Charactor(c.resultName)).list().apply()

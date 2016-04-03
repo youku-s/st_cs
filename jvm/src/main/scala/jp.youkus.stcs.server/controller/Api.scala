@@ -15,7 +15,7 @@ class Api extends ScalatraServlet with ErrorHandler {
   }
   post("/sheet") {
     val ret = for {
-      sheet <- withoutError(read[json.Sheet](request.body)).right
+      sheet <- withoutError(read[json.request.Sheet](request.body)).right
     } yield {
       DB.localTx { implicit session =>
         val charactor = model.Charactor.create(
@@ -92,7 +92,7 @@ class Api extends ScalatraServlet with ErrorHandler {
           )
           json.Sort(sort, t)
         }
-        Ok(write(json.Sheet(charactor, parts, items, skills, relations, tensions, tags)))
+        Ok(write(json.response.Sheet(charactor, parts, items, skills, relations, tensions, tags)))
       }
     }
     ret.merge
@@ -109,7 +109,7 @@ class Api extends ScalatraServlet with ErrorHandler {
         val relations = model.Relation.findByCid(id).map(x => json.Sort(x.sort, json.Relation(x)))
         val tensions = model.Tension.findByCid(id).map(x => json.Sort(x.sort, json.Tension(x)))
         val tags = model.Tag.findByCid(id).map(x => json.Sort(x.sort, x.name))
-        Ok(write(json.Sheet(charactor, parts, items, skills, relations, tensions, tags)))
+        Ok(write(json.response.Sheet(charactor, parts, items, skills, relations, tensions, tags)))
       }
     }
     ret.merge
@@ -117,7 +117,7 @@ class Api extends ScalatraServlet with ErrorHandler {
   post("/sheet/:id") {
     val ret = for {
       id <- required(params.get("id")).right
-      sheet <- withoutError(read[json.Sheet](request.body)).right
+      sheet <- withoutError(read[json.request.Sheet](request.body)).right
       charactor <- found(DB.readOnly { implicit s => model.Charactor.find(id) }).right
       _ <- required(charactor.password == sheet.password.map(model.Charactor.toHash)).right
     } yield {
@@ -203,7 +203,7 @@ class Api extends ScalatraServlet with ErrorHandler {
           )
           json.Sort(sort, t)
         }
-        Ok(write(json.Sheet(updated, parts, items, skills, relations, tensions, tags)))
+        Ok(write(json.response.Sheet(updated, parts, items, skills, relations, tensions, tags)))
       }
     }
     ret.merge
@@ -235,7 +235,6 @@ class Api extends ScalatraServlet with ErrorHandler {
     } yield {
       DB.readOnly { implicit session =>
         val (count, results) = model.Charactor.lists(search.limit, search.offset, search.tags)
-        println(results)
         val sheets = results.map { charactor =>
           val parts = model.Part.findByCid(charactor.id).map(x => json.Sort(x.sort, json.Part(x)))
           val items = model.Item.findByCid(charactor.id).map(x => json.Sort(x.sort, json.Item(x)))
@@ -243,7 +242,7 @@ class Api extends ScalatraServlet with ErrorHandler {
           val relations = model.Relation.findByCid(charactor.id).map(x => json.Sort(x.sort, json.Relation(x)))
           val tensions = model.Tension.findByCid(charactor.id).map(x => json.Sort(x.sort, json.Tension(x)))
           val tags = model.Tag.findByCid(charactor.id).map(x => json.Sort(x.sort, x.name))
-          json.Sheet(charactor, parts, items, skills, relations, tensions, tags)
+          json.response.Sheet(charactor, parts, items, skills, relations, tensions, tags)
         }
         Ok(write(json.SearchResult(sheets, count)))
       }

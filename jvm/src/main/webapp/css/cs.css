@@ -3,26 +3,27 @@
 }
 #main {
   width: 1100px;
-}
-html {
-  background-color: #F5F5F5;
+  margin: 0 auto;
 }
 .box {
   margin: 10px;
   padding: 10px;
   border: 1px solid #000000;
+  background-color: #F5F5F5;
 }
 .header {
   margin: 10px;
   padding: 10px;
   border: 1px solid #000000;
   border-radius: 0.5em 0.5em 0 0;
+  background-color: #F5F5F5;
 }
 .footer {
   margin: 10px;
   padding: 10px;
   border: 1px solid #000000;
   border-radius: 0 0 0.5em 0.5em;
+  background-color: #F5F5F5;
 }
 table {
   border-collapse: collapse;
@@ -113,4 +114,20 @@ table.relation {
 }
 .row {
   margin: 5px;
+}
+table.list {
+  width: 1000px;
+  table-layout: fixed;
+}
+div.lists {
+  margin: 0 10px 0 10px;
+}
+table.list td {
+  padding: 10px;
+}
+.search {
+  text-align: right;
+}
+.search input {
+  width: 200px;
 }

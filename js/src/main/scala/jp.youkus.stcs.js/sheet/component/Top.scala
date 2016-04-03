@@ -79,7 +79,7 @@ object Top {
           ),
           <.div(
             ^.classSet("right" -> true),
-            password(Password.Prop(onSave(s), onDelete(s), onCreate(s), s.id, s.display)),
+            password(Password.Prop(onSave(s), onDelete(s), onCreate(s), s.id, s.display, s.usePassword)),
             tag(Tag.Prop(s.tags))
           )
         ),
@@ -87,7 +87,7 @@ object Top {
       )
     }
   }
-  def component(sheet: Option[json.Sheet]) = {
+  def component(sheet: Option[json.response.Sheet]) = {
     ReactComponentB[Unit]("Top")
       .initialState(sheet.map(M.Sheet.fromJson).getOrElse(M.Sheet.initialValue))
       .renderBackend[Top.Backend]

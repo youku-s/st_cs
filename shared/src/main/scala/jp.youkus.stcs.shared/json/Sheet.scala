@@ -1,48 +1,71 @@
 package jp.youkus.stcs.shared.json
 
 import jp.youkus.stcs.shared.model
+import org.joda.time.format.DateTimeFormat
 
-case class Sheet(
-  id: Option[String],
-  name: String,
-  csClass: Option[Int],
-  csType: Option[Int],
-  csEaude: Option[Int],
-  parts: Seq[Sort[Part]],
-  items: Seq[Sort[Item]],
-  skills: Seq[Sort[Skill]],
-  relations: Seq[Sort[Relation]],
-  tensions: Seq[Sort[Tension]],
-  memo: String,
-  password: Option[String],
-  tags: Seq[Sort[String]],
-  display: Boolean
-)
-object Sheet {
-  def apply(
-    charactor: model.Charactor,
+object request {
+  case class Sheet(
+    id: Option[String],
+    name: String,
+    csClass: Option[Int],
+    csType: Option[Int],
+    csEaude: Option[Int],
     parts: Seq[Sort[Part]],
     items: Seq[Sort[Item]],
     skills: Seq[Sort[Skill]],
     relations: Seq[Sort[Relation]],
     tensions: Seq[Sort[Tension]],
-    tags: Seq[Sort[String]]
-  ): Sheet = Sheet(
-    id = Some(charactor.id),
-    name = charactor.name,
-    csClass = charactor.csClass,
-    csType = charactor.csType,
-    csEaude = charactor.csEaude,
-    parts = parts,
-    items = items,
-    skills = skills,
-    relations = relations,
-    tensions = tensions,
-    memo = charactor.memo,
-    password = None,
-    tags = tags,
-    display = charactor.display
+    memo: String,
+    password: Option[String],
+    tags: Seq[Sort[String]],
+    display: Boolean
   )
+}
+object response {
+  case class Sheet(
+    id: Option[String],
+    name: String,
+    csClass: Option[Int],
+    csType: Option[Int],
+    csEaude: Option[Int],
+    parts: Seq[Sort[Part]],
+    items: Seq[Sort[Item]],
+    skills: Seq[Sort[Skill]],
+    relations: Seq[Sort[Relation]],
+    tensions: Seq[Sort[Tension]],
+    memo: String,
+    usePassword: Boolean,
+    tags: Seq[Sort[String]],
+    display: Boolean,
+    updateDate: String
+  )
+  object Sheet {
+    def apply(
+      charactor: model.Charactor,
+      parts: Seq[Sort[Part]],
+      items: Seq[Sort[Item]],
+      skills: Seq[Sort[Skill]],
+      relations: Seq[Sort[Relation]],
+      tensions: Seq[Sort[Tension]],
+      tags: Seq[Sort[String]]
+    ): Sheet = Sheet(
+      id = Some(charactor.id),
+      name = charactor.name,
+      csClass = charactor.csClass,
+      csType = charactor.csType,
+      csEaude = charactor.csEaude,
+      parts = parts,
+      items = items,
+      skills = skills,
+      relations = relations,
+      tensions = tensions,
+      memo = charactor.memo,
+      usePassword = charactor.password.isDefined,
+      tags = tags,
+      display = charactor.display,
+      updateDate = charactor.updateDate.map(_.toString(DateTimeFormat.mediumDateTime())).getOrElse("-")
+    )
+  }
 }
 case class Part(
   name: String,

@@ -13,7 +13,8 @@ object Password {
     onDelete: Callback,
     onCreate: Callback,
     id: Option[String],
-    display: Boolean
+    display: Boolean,
+    usePassword: Boolean
   )
   class Backend(scope: BackendScope[Prop, Boolean], pScope: BackendScope[Unit, M.Sheet]) {
     def onPasswordChange(e: ReactEventI): Callback = {
@@ -28,28 +29,32 @@ object Password {
     def render(p: Prop, s: Boolean) = {
       <.div(
         ^.classSet("box" -> true),
-        <.div(
-          ^.classSet("row" -> true),
+        if (!p.id.isDefined) {
           <.div(
-            <.input(
-              ^.`type` := "radio",
-              ^.name := "usePassword",
-              ^.onChange --> onClick(false),
-              ^.checked := !s
+            ^.classSet("row" -> true),
+            <.div(
+              <.input(
+                ^.`type` := "radio",
+                ^.name := "usePassword",
+                ^.onChange --> onClick(false),
+                ^.checked := !s
+              ),
+              "パスワードを使用しない "
             ),
-            "パスワードを使用しない "
-          ),
-          <.div(
-            <.input(
-              ^.`type` := "radio",
-              ^.name := "usePassword",
-              ^.onChange --> onClick(true),
-              ^.checked := s
-            ),
-            "パスワードを使用する"
+            <.div(
+              <.input(
+                ^.`type` := "radio",
+                ^.name := "usePassword",
+                ^.onChange --> onClick(true),
+                ^.checked := s
+              ),
+              "パスワードを使用する"
+            )
           )
-        ),
-        if (s) {
+        } else {
+          EmptyTag
+        },
+        if (s || p.usePassword) {
           <.div(
             ^.classSet("row" -> true),
             "パスワード",
