@@ -36,6 +36,17 @@ object Part {
       akui = part.akui
     )
   )
+  def toJson(part: Part): json.Part = json.Part(
+    name = part.name,
+    shihai = part.talent.shihai,
+    jyujyun = part.talent.jyujyun,
+    dasan = part.talent.dasan,
+    jyunshin = part.talent.jyunshin,
+    oshi = part.talent.oshi,
+    sasshi = part.talent.sasshi,
+    koui = part.talent.koui,
+    akui = part.talent.akui
+  )
 }
 case class Talent(
   shihai: Option[Int],
@@ -71,6 +82,11 @@ object Item {
     main = item.main,
     sub = item.sub
   )
+  def toJson(item: Item): json.Item = json.Item(
+    name = item.name,
+    main = item.main,
+    sub = item.sub
+  )
 }
 case class Skill(
   name: String,
@@ -80,6 +96,12 @@ case class Skill(
 )
 object Skill {
   def apply(skill: json.Skill): Skill = Skill(
+    name = skill.name,
+    timing = skill.timing,
+    cost = skill.cost,
+    detail = skill.detail
+  )
+  def toJson(skill: Skill): json.Skill = json.Skill(
     name = skill.name,
     timing = skill.timing,
     cost = skill.cost,
@@ -99,6 +121,12 @@ object Relation {
     ueshita = relation.ueshita,
     semeuke = relation.semeuke
   )
+  def toJson(relation: Relation): json.Relation = json.Relation(
+    to = relation.to,
+    name = relation.name,
+    ueshita = relation.ueshita,
+    semeuke = relation.semeuke
+  )
 }
 case class Tension(
   number: Option[Int],
@@ -106,6 +134,10 @@ case class Tension(
 )
 object Tension {
   def apply(tension: json.Tension): Tension = Tension(
+    number = tension.number,
+    status = tension.status
+  )
+  def toJson(tension: Tension): json.Tension = json.Tension(
     number = tension.number,
     status = tension.status
   )
@@ -170,5 +202,21 @@ object App {
     password = sheet.password,
     tags = sheet.tags.map{ case json.Sort(sort, tag) => sort -> tag }.toMap,
     display = sheet.display
+  )
+  def toJson(app: App): json.Sheet = json.Sheet(
+    id = app.id,
+    name = app.name,
+    csClass = app.csClass,
+    csType = app.csType,
+    csEaude = app.csEaude,
+    parts = app.parts.toList.map { case (sort, part) => json.Sort(sort, Part.toJson(part)) },
+    items = app.items.toList.map { case (sort, item) => json.Sort(sort, Item.toJson(item)) },
+    skills = app.skills.toList.map { case (sort, skill) => json.Sort(sort, Skill.toJson(skill)) },
+    relations = app.relations.toList.map { case (sort, relation) => json.Sort(sort, Relation.toJson(relation)) },
+    tensions = app.tensions.toList.map { case (sort, tension) => json.Sort(sort, Tension.toJson(tension)) },
+    memo = app.memo,
+    password = app.password,
+    tags = app.tags.toList.map { case (sort, tag) => json.Sort(sort, tag) },
+    display = app.display
   )
 }

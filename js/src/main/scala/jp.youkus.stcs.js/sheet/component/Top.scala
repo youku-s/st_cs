@@ -1,10 +1,14 @@
 package jp.youkus.stcs.js.sheet.component
 
 import scala.scalajs.js
+import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.dom.ext.Ajax
+import org.scalajs.dom.ext.Ajax.InputData._
 
 import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactElement}
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
+import upickle.default.write
 
 import jp.youkus.stcs.shared.json
 import jp.youkus.stcs.js.sheet.{model => M}
@@ -23,6 +27,43 @@ object Top {
     val footer = Footer.component()
     val memo = Memo.component(scope)
     def render(s: M.App): ReactElement = {
+      def onSave(): Callback = Callback {
+        s.id match {
+          case Some(id) => {
+            val f = Ajax.post(s"/api/sheet/${id}", write(M.App.toJson(s)))
+            f.onSuccess { case xhr =>
+              println("save success")
+            }
+            f.onFailure { case _ =>
+              println("save fail")
+            }
+          }
+          case None => // do nothing
+        }
+      }
+      def onDelete(): Callback = Callback {
+        s.id match {
+          case Some(id) => {
+            val f = Ajax.delete(s"/api/sheet/${s.id}", "")
+            f.onSuccess { case xhr =>
+              println("delete success")
+            }
+            f.onFailure { case _ =>
+              println("delete fail")
+            }
+          }
+          case None => // do nothing
+        }
+      }
+      def onCreate(): Callback = Callback {
+        val f = Ajax.post("/api/sheet", write(M.App.toJson(s)))
+        f.onSuccess { case xhr =>
+          println("create success")
+        }
+        f.onFailure { case _ =>
+          println("create fail")
+        }
+      }
       <.div(
         header(),
         <.div(
@@ -37,7 +78,7 @@ object Top {
         ),
         <.div(
           ^.classSet("right" -> true),
-          password(Password.Prop(s.password, s.display)),
+          password(Password.Prop(onSave, onDelete, onCreate, s.id, s.display)),
           tag(Tag.Prop(s.tags))
         ),
         footer()

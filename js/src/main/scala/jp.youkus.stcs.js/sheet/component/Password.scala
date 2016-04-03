@@ -9,7 +9,10 @@ import jp.youkus.stcs.js.sheet.{model => M}
 
 object Password {
   case class Prop(
-    password: Option[String],
+    onSave: Callback,
+    onDelete: Callback,
+    onCreate: Callback,
+    id: Option[String],
     display: Boolean
   )
   class Backend(scope: BackendScope[Prop, Boolean], pScope: BackendScope[Unit, M.App]) {
@@ -67,15 +70,27 @@ object Password {
           ),
           "リストに載せない"
         ),
-        <.div(
-          ^.classSet("row" -> true),
-          <.button(
-            "保存する"
-          ),
-          <.button(
-            "削除する"
+        if (p.id.isDefined) {
+          <.div(
+            ^.classSet("row" -> true),
+            <.button(
+              "保存する",
+              ^.onClick --> p.onSave
+            ),
+            <.button(
+              "削除する",
+              ^.onClick --> p.onDelete
+            )
           )
-        )
+        } else {
+          <.div(
+            ^.classSet("row" -> true),
+            <.button(
+              "保存する",
+              ^.onClick --> p.onCreate
+            )
+          )
+        }
       )
     }
   }

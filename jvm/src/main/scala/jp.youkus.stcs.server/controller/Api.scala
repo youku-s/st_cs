@@ -14,9 +14,9 @@ class Api extends ScalatraServlet with ErrorHandler {
     response.setHeader("Cache-Control", "no-cache")
   }
   post("/sheet") {
+    println(request.body)
     val ret = for {
-      jd <- required(params.get("q")).right
-      sheet <- withoutError(read[json.Sheet](jd)).right
+      sheet <- withoutError(read[json.Sheet](request.body)).right
     } yield {
       DB.localTx { implicit session =>
         val charactor = model.Charactor.create(
@@ -118,8 +118,7 @@ class Api extends ScalatraServlet with ErrorHandler {
   post("/sheet/:id") {
     val ret = for {
       id <- required(params.get("id")).right
-      jd <- required(params.get("q")).right
-      sheet <- withoutError(read[json.Sheet](jd)).right
+      sheet <- withoutError(read[json.Sheet](request.body)).right
       charactor <- found(DB.readOnly { implicit s => model.Charactor.find(id) }).right
       _ <- required(charactor.password == sheet.password.map(model.Charactor.toHash)).right
     } yield {
@@ -213,8 +212,7 @@ class Api extends ScalatraServlet with ErrorHandler {
   delete("/sheet/:id") {
     val ret = for {
       id <- required(params.get("id")).right
-      jd <- required(params.get("q")).right
-      sheet <- withoutError(read[json.Sheet](jd)).right
+      sheet <- withoutError(read[json.Sheet](request.body)).right
       charactor <- found(DB.readOnly { implicit s => model.Charactor.find(id) }).right
       _ <- required(charactor.password == sheet.password.map(model.Charactor.toHash)).right
     } yield {
