@@ -6,13 +6,14 @@ import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactEle
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
-import jp.youkus.stcs.js.sheet.{model => M, util}
+import jp.youkus.stcs.js.sheet.util
+import jp.youkus.stcs.js.{model => M}
 
 object RelationTable {
   case class Prop(
     relations: Map[Int, M.Relation]
   )
-  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.App]) {
+  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.Sheet]) {
     def onChange(index: Int, f: (M.Relation, String) => M.Relation)(e: ReactEventI): Callback = {
       pScope.modState(s => 
         s.copy(
@@ -80,8 +81,8 @@ object RelationTable {
                   <.td(
                     <.input(
                       ^.`type` := "text",
-                      ^.value := relation.name,
-                      ^.onChange ==> onChange(index, (p, v) => p.copy(name = v))_
+                      ^.value := relation.to,
+                      ^.onChange ==> onChange(index, (p, v) => p.copy(to = v))_
                     )
                   ),
                   <.td(
@@ -132,7 +133,7 @@ object RelationTable {
       )
     }
   }
-  def component(pScope: BackendScope[Unit, M.App]) = {
+  def component(pScope: BackendScope[Unit, M.Sheet]) = {
     ReactComponentB[RelationTable.Prop]("RelationTable")
       .stateless
       .backend(scope => new RelationTable.Backend(scope, pScope))

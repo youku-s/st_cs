@@ -6,13 +6,14 @@ import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactEle
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
-import jp.youkus.stcs.js.sheet.{model => M, util}
+import jp.youkus.stcs.js.sheet.util
+import jp.youkus.stcs.js.{model => M}
 
 object ItemTable {
   case class Prop(
     items: Map[Int, M.Item]
   )
-  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.App]) {
+  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.Sheet]) {
     def onChange(index: Int, f: (M.Item, String) => M.Item)(e: ReactEventI): Callback = {
       pScope.modState(s => 
         s.copy(
@@ -123,7 +124,7 @@ object ItemTable {
       )
     }
   }
-  def component(pScope: BackendScope[Unit, M.App]) = {
+  def component(pScope: BackendScope[Unit, M.Sheet]) = {
     ReactComponentB[ItemTable.Prop]("ItemTable")
       .stateless
       .backend(scope => new ItemTable.Backend(scope, pScope))

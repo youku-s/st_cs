@@ -4,13 +4,13 @@ import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactEle
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
-import jp.youkus.stcs.js.sheet.{model => M}
+import jp.youkus.stcs.js.{model => M}
 
 object Tag {
   case class Prop(
     tags: Map[Int, String]
   )
-  class Backend(scope: BackendScope[Prop, String], pScope: BackendScope[Unit, M.App]) {
+  class Backend(scope: BackendScope[Prop, String], pScope: BackendScope[Unit, M.Sheet]) {
     def onClick(index: Int): Callback = {
       pScope.modState(s =>
         s.copy(
@@ -72,7 +72,7 @@ object Tag {
       )
     }
   }
-  def component(pScope: BackendScope[Unit, M.App]) = {
+  def component(pScope: BackendScope[Unit, M.Sheet]) = {
     ReactComponentB[Prop]("Tag")
       .initialState("")
       .backend(scope => new Tag.Backend(scope, pScope))

@@ -212,9 +212,9 @@ class Api extends ScalatraServlet with ErrorHandler {
   delete("/sheet/:id") {
     val ret = for {
       id <- required(params.get("id")).right
-      sheet <- withoutError(read[json.Sheet](request.body)).right
+      p <- withoutError(read[json.Password](request.body)).right
       charactor <- found(DB.readOnly { implicit s => model.Charactor.find(id) }).right
-      _ <- required(charactor.password == sheet.password.map(model.Charactor.toHash)).right
+      _ <- required(charactor.password == p.password.map(model.Charactor.toHash)).right
     } yield {
       DB.localTx { implicit session =>
         model.Part.removeByCid(charactor.id)
@@ -229,8 +229,25 @@ class Api extends ScalatraServlet with ErrorHandler {
     }
     ret.merge
   }
-  get("/sheets") {
-    Ok()
+  get("/lists") {
+    val ret = for {
+      search <- withoutError(read[json.Search](request.body)).right
+    } yield {
+      DB.readOnly { implicit session =>
+        val (count, results) = model.Charactor.lists(search.limit, search.offset, search.tags)
+        val sheets = results.map { charactor =>
+          val parts = model.Part.findByCid(charactor.id).map(x => json.Sort(x.sort, json.Part(x)))
+          val items = model.Item.findByCid(charactor.id).map(x => json.Sort(x.sort, json.Item(x)))
+          val skills = model.Skill.findByCid(charactor.id).map(x => json.Sort(x.sort, json.Skill(x)))
+          val relations = model.Relation.findByCid(charactor.id).map(x => json.Sort(x.sort, json.Relation(x)))
+          val tensions = model.Tension.findByCid(charactor.id).map(x => json.Sort(x.sort, json.Tension(x)))
+          val tags = model.Tag.findByCid(charactor.id).map(x => json.Sort(x.sort, x.name))
+          json.Sheet(charactor, parts, items, skills, relations, tensions, tags)
+        }
+        Ok(write(json.SearchResult(sheets, count)))
+      }
+    }
+    ret.merge
   }
   def required(x: Boolean): Either[ActionResult, Unit] = if(x) { Right(()) } else { Left(BadRequest("")) }
   def required[T](x: Option[T]): Either[ActionResult, T] = x match {

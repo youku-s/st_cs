@@ -37,22 +37,49 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
       select.from(Charactor as c).where.eq(c.id, id)
     }.map(Charactor(c.resultName)).single().apply()
   }
-  def lists(limit: Int, offset: Int)(implicit session: DBSession): (Int, List[Charactor]) = {
+  def lists(limit: Int, offset: Int, tags: Option[Seq[String]])(implicit session: DBSession): (Int, List[Charactor]) = {
     val c = Charactor.syntax("c")
-    val count = withSQL {
-      select.from(Charactor as c)
-        .where
-          .eq(c.display, true)
-    }.map(rs => rs.int(1)).single.apply()
-    val sheets = withSQL {
-      select.from(Charactor as c)
-        .where
-          .eq(c.display, true)
-        .orderBy(c.updateDate)
-        .limit(limit)
-        .offset(offset)
-    }.map(Charactor(c.resultName)).list().apply()
-    (count.getOrElse(0), sheets)
+    val t = Tag.syntax("t")
+    tags match {
+      case None => {
+        val count = withSQL {
+          select.from(Charactor as c)
+            .where
+            .eq(c.display, true)
+        }.map(rs => rs.int(1)).single.apply()
+        val sheets = withSQL {
+          select.from(Charactor as c)
+            .where
+            .eq(c.display, true)
+            .orderBy(c.updateDate)
+            .limit(limit)
+            .offset(offset)
+        }.map(Charactor(c.resultName)).list().apply()
+        (count.getOrElse(0), sheets)
+      }
+      case Some(ts) => {
+        val count = withSQL {
+          select.from(Charactor as c)
+            .innerJoin(Tag as t).on(c.id, t.cid) 
+            .where
+              .eq(c.display, true)
+              .and
+              .in(t.name, ts)
+        }.map(rs => rs.int(1)).single.apply()
+        val sheets = withSQL {
+          select.from(Charactor as c)
+            .innerJoin(Tag as t).on(c.id, t.cid) 
+            .where
+              .eq(c.display, true)
+              .and
+              .in(t.name, ts)
+            .orderBy(c.updateDate)
+            .limit(limit)
+            .offset(offset)
+        }.map(Charactor(c.resultName)).list().apply()
+        (count.getOrElse(0), sheets)
+      }
+    }
   }
   def create(
     name: String,

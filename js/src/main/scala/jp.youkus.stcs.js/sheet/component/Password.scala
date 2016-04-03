@@ -5,7 +5,7 @@ import japgolly.scalajs.react.vdom.EmptyTag
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
-import jp.youkus.stcs.js.sheet.{model => M}
+import jp.youkus.stcs.js.{model => M}
 
 object Password {
   case class Prop(
@@ -15,7 +15,7 @@ object Password {
     id: Option[String],
     display: Boolean
   )
-  class Backend(scope: BackendScope[Prop, Boolean], pScope: BackendScope[Unit, M.App]) {
+  class Backend(scope: BackendScope[Prop, Boolean], pScope: BackendScope[Unit, M.Sheet]) {
     def onPasswordChange(e: ReactEventI): Callback = {
       pScope.modState(s => s.copy(password = Some(e.target.value)))
     }
@@ -94,7 +94,7 @@ object Password {
       )
     }
   }
-  def component(pScope: BackendScope[Unit, M.App]) = {
+  def component(pScope: BackendScope[Unit, M.Sheet]) = {
     ReactComponentB[Prop]("Password")
       .initialState(false)
       .backend(scope => new Password.Backend(scope, pScope))

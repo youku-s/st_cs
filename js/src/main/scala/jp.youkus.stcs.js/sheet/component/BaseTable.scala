@@ -4,7 +4,7 @@ import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactEle
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
-import jp.youkus.stcs.js.sheet.{model => M}
+import jp.youkus.stcs.js.{model => M}
 
 object BaseTable {
   case class Prop(
@@ -13,7 +13,7 @@ object BaseTable {
     csType: Option[Int],
     csEaude: Option[Int]
   )
-  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.App]) {
+  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.Sheet]) {
     def toIntOpt(x: String): Option[Int] = try {
       Some(x.toInt)
     } catch {
@@ -103,7 +103,7 @@ object BaseTable {
       )
     }
   }
-  def component(pScope: BackendScope[Unit, M.App]) = {
+  def component(pScope: BackendScope[Unit, M.Sheet]) = {
     ReactComponentB[Prop]("BaseTable")
       .stateless
       .backend(scope => new BaseTable.Backend(scope, pScope))

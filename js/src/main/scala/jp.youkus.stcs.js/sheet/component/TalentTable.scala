@@ -6,7 +6,8 @@ import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactEle
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 
-import jp.youkus.stcs.js.sheet.{model => M, util}
+import jp.youkus.stcs.js.sheet.util
+import jp.youkus.stcs.js.{model => M}
 
 object TalentTable {
   case class Prop(
@@ -15,7 +16,7 @@ object TalentTable {
     relations: Map[Int, M.Relation],
     parts: Map[Int, M.Part]
   )
-  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.App]) {
+  class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.Sheet]) {
     def onChange(index: Int, f: (M.Part, String) => M.Part)(e: ReactEventI): Callback = {
       pScope.modState(s => 
         s.copy(
@@ -547,7 +548,7 @@ object TalentTable {
       )
     }
   }
-  def component(pScope: BackendScope[Unit, M.App]) = {
+  def component(pScope: BackendScope[Unit, M.Sheet]) = {
     ReactComponentB[TalentTable.Prop]("TalentTable")
       .stateless
       .backend(scope => new TalentTable.Backend(scope, pScope))
