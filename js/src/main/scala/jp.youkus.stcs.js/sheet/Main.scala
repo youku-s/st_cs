@@ -13,9 +13,11 @@ import upickle.default.read
 import jp.youkus.stcs.js.sheet.{component => C}
 import jp.youkus.stcs.shared.json
 
-object Main {
+@JSExport
+object Main extends JSApp {
   def main(): Unit = {
   }
+  @JSExport
   def render(id: String): Unit = {
     if (id.isEmpty) {
       val top = C.Top.component(None)

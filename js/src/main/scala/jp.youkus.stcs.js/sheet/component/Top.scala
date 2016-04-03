@@ -46,7 +46,7 @@ object Top {
   }
   def component(sheet: Option[json.Sheet]) = {
     ReactComponentB[Unit]("Top")
-      .initialState(M.App.initialValue)
+      .initialState(sheet.map(M.App.fromJson).getOrElse(M.App.initialValue))
       .renderBackend[Top.Backend]
       .buildU
   }

@@ -35,7 +35,7 @@ lazy val root = (crossProject in file("."))
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "0.8.2",
       "com.github.japgolly.scalajs-react" %%% "core" % "0.10.4",
-      "com.lihaoyi" %% "upickle" % "0.3.9"
+      "com.lihaoyi" %%% "upickle" % "0.3.9"
     ),
     jsDependencies ++= Seq(
       "org.webjars.bower" % "react" % "0.14.3"
