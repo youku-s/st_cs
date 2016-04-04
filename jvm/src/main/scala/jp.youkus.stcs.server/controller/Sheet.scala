@@ -1,11 +1,9 @@
 package jp.youkus.stcs.server.controller
 
+import jp.youkus.stcs.shared.model.Charactor
 import org.scalatra.{Ok, ScalatraServlet}
 import org.scalatra.scalate.ScalateSupport
-
 import scalikejdbc.DB
-
-import jp.youkus.stcs.shared.model.Charactor
 
 class Sheet extends ScalatraServlet with ScalateSupport {
   get("/") {

@@ -1,10 +1,9 @@
 package jp.youkus.stcs.server.controller
 
+import jp.youkus.stcs.shared.{json, model}
 import org.scalatra.{ActionResult, BadRequest, NotFound, Ok, ScalatraServlet}
 import scalikejdbc.DB
 import upickle.default._
-
-import jp.youkus.stcs.shared.{json, model}
 
 class Api extends ScalatraServlet with ErrorHandler {
   before() {

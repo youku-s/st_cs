@@ -3,7 +3,6 @@ package jp.youkus.stcs.js.sheet.component
 import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactElement, ReactEventI, ReactKeyboardEventI}
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
-
 import jp.youkus.stcs.js.{model => M}
 
 object Tag {

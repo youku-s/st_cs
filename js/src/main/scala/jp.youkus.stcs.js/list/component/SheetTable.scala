@@ -1,13 +1,11 @@
 package jp.youkus.stcs.js.list.component
 
-import scala.scalajs.js
-
 import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactElement}
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
-
-import jp.youkus.stcs.shared.json
 import jp.youkus.stcs.js.{model => M}
+import jp.youkus.stcs.shared.json
+import scala.scalajs.js
 
 object SheetTable {
   case class Prop(

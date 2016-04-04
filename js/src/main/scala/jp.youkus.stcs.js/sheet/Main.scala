@@ -1,17 +1,14 @@
 package jp.youkus.stcs.js.sheet
 
+import japgolly.scalajs.react.ReactDOM
+import jp.youkus.stcs.js.sheet.{component => C}
+import jp.youkus.stcs.shared.json
 import org.scalajs.dom.document
 import org.scalajs.dom.ext.Ajax
-
 import scala.scalajs.js
 import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
-
-import japgolly.scalajs.react.ReactDOM
 import upickle.default.read
-
-import jp.youkus.stcs.js.sheet.{component => C}
-import jp.youkus.stcs.shared.json
 
 @JSExport
 object Main extends JSApp {

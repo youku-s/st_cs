@@ -1,13 +1,11 @@
 package jp.youkus.stcs.js.sheet.component
 
-import scala.scalajs.js
-
 import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactElement, ReactEventI}
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
-
 import jp.youkus.stcs.js.sheet.util
 import jp.youkus.stcs.js.{model => M}
+import scala.scalajs.js
 
 object SkillTable {
   case class Prop(

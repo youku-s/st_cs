@@ -47,7 +47,7 @@ object Top {
           ^.classSet("lists" -> true),
           search(),
           sheetTable(SheetTable.Prop(s.sheets)),
-          paging(Paging.Prop(s.offset, s.max))
+          paging(Paging.Prop(s.offset, s.max, s.sheets.size))
         ),
         footer()
       )

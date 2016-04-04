@@ -12,7 +12,8 @@ object Paging {
   val pageUnit = 10
   case class Prop(
     offset: Int,
-    max: Int
+    max: Int,
+    count: Int
   )
   class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, Top.State]) {
     def onPageChange(offset: Int, p: Prop): Callback = Callback {
@@ -31,31 +32,36 @@ object Paging {
       val head = if (current <= 1) { 1 } else if(current + 2 > maxPage) { maxPage - 4 } else { current - 2 }
       val indexes = Seq.iterate(0, ((p.max - 1) / pageUnit) + 1)(_ + 1).map{ x => (x + 1, x * pageUnit) }
         .dropWhile{ case (i, _) => i < head }.take(5)
-        
+      
       <.div(
-        ^.classSet("pagination" -> true),
-        <.span(
-          "first",
-          ^.onClick --> onPageChange(0, p)
+        <.div(
+          s"全${p.max}件中、${(current - 1) * pageUnit + 1}件目から${p.count}件を表示中"
         ),
-        <.span(
-          "<",
-          ^.onClick --> onPageChange(p.offset - pageUnit, p)
-        ),
-        indexes.map { case (index, offset) =>
+        <.div(
+          ^.classSet("pagination" -> true),
           <.span(
-            ^.classSet("current" -> (offset == p.offset)),
-            index,
-            ^.onClick --> onPageChange(offset, p)
+            "first",
+            ^.onClick --> onPageChange(0, p)
+          ),
+          <.span(
+            "<",
+            ^.onClick --> onPageChange(p.offset - pageUnit, p)
+          ),
+          indexes.map { case (index, offset) =>
+            <.span(
+              ^.classSet("current" -> (offset == p.offset)),
+              index,
+              ^.onClick --> onPageChange(offset, p)
+            )
+          },
+          <.span(
+            ">",
+            ^.onClick --> onPageChange(p.offset + pageUnit, p)
+          ),
+          <.span(
+            "last",
+            ^.onClick --> onPageChange(lastOffset(p.max), p)
           )
-        },
-        <.span(
-          ">",
-          ^.onClick --> onPageChange(p.offset + pageUnit, p)
-        ),
-        <.span(
-          "last",
-          ^.onClick --> onPageChange(lastOffset(p.max), p)
         )
       )
     }

@@ -1,9 +1,8 @@
-import org.scalatra.LifeCycle
 import javax.servlet.ServletContext
+import jp.youkus.stcs.server.controller.{Api, Lists, Sheet}
+import org.scalatra.LifeCycle
 import scalikejdbc.DB
 import scalikejdbc.config.DBs
-
-import jp.youkus.stcs.server.controller.{Api, Lists, Sheet}
 
 class ScalatraBootstrap extends LifeCycle {
   DBs.setupAll()
