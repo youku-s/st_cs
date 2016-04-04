@@ -1,21 +1,20 @@
 package jp.youkus.stcs.js.sheet.component
 
-import scala.scalajs.js
-import scala.concurrent.ExecutionContext.Implicits.global
-import org.scalajs.dom.ext.Ajax
-import org.scalajs.dom.ext.Ajax.InputData._
-
 import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactElement}
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
-import upickle.default.write
-
 import jp.youkus.stcs.shared.json
 import jp.youkus.stcs.js.{model => M}
+import org.scalajs.dom.ext.Ajax
+import org.scalajs.dom.ext.Ajax.InputData._
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.scalajs.js
+import upickle.default.write
 
 object Top {
   class Backend(scope: BackendScope[Unit, M.Sheet]) {
     val header = Header.component()
+    val notificationBox = NotificationBox.component(scope)
     val baseTable = BaseTable.component(scope)
     val talentTable = TalentTable.component(scope)
     val tensionGage = TensionGage.component(scope)
@@ -31,10 +30,10 @@ object Top {
         case Some(id) => {
           val f = Ajax.post(s"/api/sheet/${id}", write(M.Sheet.toJson(s)))
           f.onSuccess { case xhr =>
-            println("save success")
+            scope.modState(s => s.copy(notification = Some(M.Normal("保存しました。")))).runNow()
           }
           f.onFailure { case _ =>
-            println("save fail")
+            scope.modState(s => s.copy(notification = Some(M.Error("パスワードが一致しませんでした。")))).runNow()
           }
         }
         case None => // do nothing
@@ -48,7 +47,7 @@ object Top {
             println("delete success")
           }
           f.onFailure { case _ =>
-            println("delete fail")
+            scope.modState(s => s.copy(notification = Some(M.Error("パスワードが一致しませんでした。")))).runNow()
           }
         }
         case None => // do nothing
@@ -57,15 +56,16 @@ object Top {
     def onCreate(s: M.Sheet): Callback = Callback {
       val f = Ajax.post("/api/sheet", write(M.Sheet.toJson(s)))
       f.onSuccess { case xhr =>
-        println("create success")
+        scope.modState(s => s.copy(notification = Some(M.Normal("保存しました。")))).runNow()
       }
       f.onFailure { case _ =>
-        println("create fail")
+        scope.modState(s => s.copy(notification = Some(M.Error("保存に失敗しました。")))).runNow()
       }
     }
     def render(s: M.Sheet): ReactElement = {
       <.div(
         header(),
+        notificationBox(NotificationBox.Prop(s.notification)),
         <.div(
           <.div(
             ^.classSet("left" -> true),

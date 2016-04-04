@@ -18,7 +18,8 @@ case class Sheet(
   tags: Map[Int, String],
   display: Boolean,
   updateDate: String,
-  usePassword: Boolean
+  usePassword: Boolean,
+  notification: Option[Notification]
 )
 case class Part(
   name: String,
@@ -166,7 +167,9 @@ object Tension {
     19 -> Tension(Some(20), 0)
   )
 }
-
+sealed trait Notification
+case class Normal(message: String) extends Notification
+case class Error(message: String) extends Notification
 object Sheet {
   def initialValue: Sheet = Sheet(
     id = None,
@@ -189,7 +192,8 @@ object Sheet {
     tags = Map.empty,
     display = true,
     usePassword = false,
-    updateDate = ""
+    updateDate = "",
+    notification = Some(Normal("hoge1!!!!!!!!")) 
   )
   def fromJson(sheet: json.response.Sheet): Sheet = Sheet(
     id = sheet.id,
@@ -207,7 +211,8 @@ object Sheet {
     usePassword = sheet.usePassword,
     tags = sheet.tags.map{ case json.Sort(sort, tag) => sort -> tag }.toMap,
     display = sheet.display,
-    updateDate = sheet.updateDate
+    updateDate = sheet.updateDate,
+    notification = None
   )
   def toJson(sheet: Sheet): json.request.Sheet = json.request.Sheet(
     id = sheet.id,
