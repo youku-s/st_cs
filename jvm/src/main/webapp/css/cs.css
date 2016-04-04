@@ -147,3 +147,16 @@ table.list td {
   background-color: #f2dede;
   border-color: #ebccd1;
 }
+.pagination {
+}
+.pagination > span {
+  background-color: #CCCCCC;
+  margin-right: 5px;
+  margin-top: 2px;
+  padding: 5px;
+  border-radius: 0.5em;
+  display: inline-block;
+}
+.current {
+  background-color: #AAAAAA;
+}

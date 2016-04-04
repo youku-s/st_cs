@@ -20,7 +20,7 @@ object Top {
     sheets: Seq[M.Sheet]
   )
   def getSheets(offset: Int, tags: Option[Seq[String]] = None): Future[State] = {
-    val jd = write(json.Search(20, offset, tags))
+    val jd = write(json.Search(2, offset, tags))
     Ajax.get(s"/api/lists?q=${jd}")
       .map { xhr =>
         val result = read[json.SearchResult[json.response.Sheet]](xhr.responseText)

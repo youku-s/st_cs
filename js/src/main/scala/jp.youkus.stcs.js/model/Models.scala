@@ -193,7 +193,7 @@ object Sheet {
     display = true,
     usePassword = false,
     updateDate = "",
-    notification = Some(Normal("hoge1!!!!!!!!")) 
+    notification = None
   )
   def fromJson(sheet: json.response.Sheet): Sheet = Sheet(
     id = sheet.id,

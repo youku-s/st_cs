@@ -30,7 +30,7 @@ object Search {
     }
     def render(s: String): ReactElement = {
       <.div(
-        ^.classSet("search" -> true),
+        ^.classSet("search" -> true, "row" -> true),
         <.input(
           ^.`type` := "text",
           ^.value:= s,
