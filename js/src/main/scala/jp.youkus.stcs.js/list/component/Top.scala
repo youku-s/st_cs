@@ -20,7 +20,7 @@ object Top {
     sheets: Seq[M.Sheet]
   )
   def getSheets(offset: Int, tags: Option[Seq[String]] = None): Future[State] = {
-    val jd = write(json.Search(2, offset, tags))
+    val jd = write(json.Search(10, offset, tags))
     Ajax.get(s"/api/lists?q=${jd}")
       .map { xhr =>
         val result = read[json.SearchResult[json.response.Sheet]](xhr.responseText)
@@ -37,6 +37,13 @@ object Top {
       <.div(
         header(),
         <.div(
+          ^.classSet("explanation" -> true),
+          <.a(
+            ^.href := "/sheet",
+            "新規作成"
+          )
+        ),
+        <.div(
           ^.classSet("lists" -> true),
           search(),
           sheetTable(SheetTable.Prop(s.sheets)),
@@ -46,16 +53,10 @@ object Top {
       )
     }
   }
-  def component() = {
+  def component(initialState: State) = {
     ReactComponentB[Unit]("Top")
-      .initialState(State(0, 0, Seq.empty))
+      .initialState(initialState)
       .renderBackend[Top.Backend]
-      .componentWillMount{ x => Callback {
-          Top.getSheets(0).onSuccess { case state => 
-            x.setState(state).runNow 
-          }
-        }
-      }
       .buildU
   }
 }

@@ -37,6 +37,8 @@ th, td {
 th {
   background-color: #ba7d69;
   margin: 2px;
+  padding: 5px;
+  text-align: center;
 }
 td {
   position: relative;
@@ -148,6 +150,7 @@ table.list td {
   border-color: #ebccd1;
 }
 .pagination {
+  text-align: center;
 }
 .pagination > span {
   background-color: #CCCCCC;
@@ -157,6 +160,9 @@ table.list td {
   border-radius: 0.5em;
   display: inline-block;
 }
-.current {
-  background-color: #AAAAAA;
+span.current {
+  background-color: #ba7d69;
+}
+div.explanation {
+  margin: 0 10px 0 10px;
 }

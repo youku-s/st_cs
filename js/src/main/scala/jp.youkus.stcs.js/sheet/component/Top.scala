@@ -9,7 +9,7 @@ import org.scalajs.dom.ext.Ajax
 import org.scalajs.dom.ext.Ajax.InputData._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.scalajs.js
-import upickle.default.write
+import upickle.default.{read, write}
 
 object Top {
   class Backend(scope: BackendScope[Unit, M.Sheet]) {
@@ -28,12 +28,16 @@ object Top {
     def onSave(s: M.Sheet): Callback = Callback {
       s.id match {
         case Some(id) => {
-          val f = Ajax.post(s"/api/sheet/${id}", write(M.Sheet.toJson(s)))
-          f.onSuccess { case xhr =>
-            scope.modState(s => s.copy(notification = Some(M.Normal("保存しました。")))).runNow()
-          }
-          f.onFailure { case _ =>
-            scope.modState(s => s.copy(notification = Some(M.Error("パスワードが一致しませんでした。")))).runNow()
+          if (s.name.isEmpty) {
+            scope.modState(s => s.copy(notification = Some(M.Normal("呼び名を入力してください。")))).runNow()
+          } else {
+            val f = Ajax.post(s"/api/sheet/${id}", write(M.Sheet.toJson(s)))
+            f.onSuccess { case xhr =>
+              scope.modState(s => s.copy(notification = Some(M.Normal("保存しました。")))).runNow()
+            }
+            f.onFailure { case _ =>
+              scope.modState(s => s.copy(notification = Some(M.Error("パスワードが一致しませんでした。")))).runNow()
+            }
           }
         }
         case None => // do nothing
@@ -54,12 +58,18 @@ object Top {
       }
     }
     def onCreate(s: M.Sheet): Callback = Callback {
-      val f = Ajax.post("/api/sheet", write(M.Sheet.toJson(s)))
-      f.onSuccess { case xhr =>
-        scope.modState(s => s.copy(notification = Some(M.Normal("保存しました。")))).runNow()
-      }
-      f.onFailure { case _ =>
-        scope.modState(s => s.copy(notification = Some(M.Error("保存に失敗しました。")))).runNow()
+      if (s.name.isEmpty) {
+        scope.modState(s => s.copy(notification = Some(M.Normal("呼び名を入力してください。")))).runNow()
+      } else {
+        val f = Ajax.post("/api/sheet", write(M.Sheet.toJson(s)))
+        f.onSuccess { case xhr =>
+          val result = read[json.response.Sheet](xhr.responseText)
+          val sheet = M.Sheet.fromJson(result).copy(notification = Some(M.Normal("保存しました。")))
+          scope.setState(sheet).runNow()
+        }
+        f.onFailure { case _ =>
+          scope.modState(s => s.copy(notification = Some(M.Error("保存に失敗しました。")))).runNow()
+        }
       }
     }
     def render(s: M.Sheet): ReactElement = {

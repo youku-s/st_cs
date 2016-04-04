@@ -1,44 +1,61 @@
 package jp.youkus.stcs.js.list.component
 
-import scala.scalajs.js
-
 import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactElement, ReactEventI, ReactKeyboardEventI}
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
-
 import jp.youkus.stcs.shared.json
 import jp.youkus.stcs.js.{model => M}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.scalajs.js
 
 object Paging {
-  val pageUnit = 2
+  val pageUnit = 10
   case class Prop(
     offset: Int,
     max: Int
   )
   class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, Top.State]) {
-    def onPageChange(offset: Int): Callback = {
-      pScope.modState(s => s.copy(offset = offset))
+    def onPageChange(offset: Int, p: Prop): Callback = Callback {
+      if (offset >= 0 && offset < p.max && offset != p.offset) {
+        Top.getSheets(offset).onSuccess { case state => 
+          pScope.setState(state).runNow 
+        }
+      }
+    }
+    def lastOffset(max: Int): Int = {
+      if (max % pageUnit == 0) { ((max / pageUnit) - 1) * pageUnit } else { (max / pageUnit) * pageUnit }
     }
     def render(p: Prop): ReactElement = {
-      val indexes = Seq.iterate(0, (p.max / pageUnit) + 1)(_ + 1).map{ x => (x + 1, x * pageUnit) }
+      val current = p.offset / pageUnit + 1
+      val maxPage = ((p.max - 1) / pageUnit) + 1
+      val head = if (current <= 1) { 1 } else if(current + 2 > maxPage) { maxPage - 4 } else { current - 2 }
+      val indexes = Seq.iterate(0, ((p.max - 1) / pageUnit) + 1)(_ + 1).map{ x => (x + 1, x * pageUnit) }
+        .dropWhile{ case (i, _) => i < head }.take(5)
+        
       <.div(
         ^.classSet("pagination" -> true),
         <.span(
+          "first",
+          ^.onClick --> onPageChange(0, p)
+        ),
+        <.span(
           "<",
-          ^.onClick --> onPageChange(p.offset - pageUnit)
+          ^.onClick --> onPageChange(p.offset - pageUnit, p)
         ),
         indexes.map { case (index, offset) =>
-          println(offset)
-          println(p.offset)
           <.span(
             ^.classSet("current" -> (offset == p.offset)),
             index,
-            ^.onClick --> onPageChange(offset)
+            ^.onClick --> onPageChange(offset, p)
           )
         },
         <.span(
           ">",
-          ^.onClick --> onPageChange(p.offset + pageUnit)
+          ^.onClick --> onPageChange(p.offset + pageUnit, p)
+        ),
+        <.span(
+          "last",
+          ^.onClick --> onPageChange(lastOffset(p.max), p)
         )
       )
     }

@@ -58,6 +58,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
         (count.getOrElse(0), sheets)
       }
       case Some(ts) => {
+        println(ts)
         val count = withSQL {
           select[Int](sqls.count).from(Charactor as c)
             .innerJoin(Tag as t).on(c.id, t.cid) 
@@ -66,6 +67,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
               .and
               .in(t.name, ts)
         }.map(rs => rs.int(1)).single.apply()
+        println(count)
         val sheets = withSQL {
           select.from(Charactor as c)
             .innerJoin(Tag as t).on(c.id, t.cid) 

@@ -9,7 +9,7 @@ object Header {
     def render = {
       <.div(
         ^.classSet("header" -> true),
-        <.h1("少女展爛会キャラクターシート")
+        <.h1("少女展爛会キャラクターシート一覧")
       )
     }
   }

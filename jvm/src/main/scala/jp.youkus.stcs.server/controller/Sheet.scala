@@ -16,7 +16,7 @@ class Sheet extends ScalatraServlet with ScalateSupport {
     contentType="text/html"
     val (title, id) = params.get("id")
       .flatMap(id => DB.readOnly { implicit s => Charactor.find(id) })
-      .map(c => (c.name, c.id)).getOrElse(("少女展爛会キャラクターシート", ""))
+      .map(c => (s"${c.name} - 少女展爛会キャラクターシート", c.id)).getOrElse(("少女展爛会キャラクターシート", ""))
     ssp("/sheet", "title" -> title, "id" -> id)
   }
 }

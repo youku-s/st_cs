@@ -21,7 +21,7 @@ object Search {
       }
     }
     def search(text: String): Callback = {
-      val tags = if (text.isEmpty) { None } else { Some(text.split("\\s").filter(_.isEmpty).toSeq) }
+      val tags = if (text.isEmpty) { None } else { Some(text.split("\\s").filter(!_.isEmpty).toSeq) }
       Top.getSheets(0, tags)
         .onSuccess { case state =>
           pScope.setState(state).runNow
