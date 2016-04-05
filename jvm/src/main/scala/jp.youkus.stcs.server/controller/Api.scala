@@ -1,6 +1,6 @@
 package jp.youkus.stcs.server.controller
 
-import jp.youkus.stcs.shared.{json, model}
+import jp.youkus.stcs.shared.{json, model, util}
 import org.scalatra.{ActionResult, BadRequest, NotFound, Ok, ScalatraServlet}
 import scalikejdbc.DB
 import upickle.default._
@@ -120,16 +120,48 @@ class Api extends ScalatraServlet with ErrorHandler {
       charactor <- found(DB.readOnly { implicit s => model.Charactor.find(id) }).right
     } yield {
       DB.readOnly { implicit session =>
-        val parts = model.Part.findByCid(id).map(x => json.Sort(x.sort, json.Part(x)))
-        val items = model.Item.findByCid(id).map(x => json.Sort(x.sort, json.Item(x)))
-        val skills = model.Skill.findByCid(id).map(x => json.Sort(x.sort, json.Skill(x)))
-        val relations = model.Relation.findByCid(id).map(x => json.Sort(x.sort, json.Relation(x)))
-        val tensions = model.Tension.findByCid(id).map(x => json.Sort(x.sort, json.Tension(x)))
-        val tags = model.Tag.findByCid(id).map(x => json.Sort(x.sort, x.name))
-        Ok(write(json.response.Sheet(charactor, parts, items, skills, relations, tensions, tags)))
+        val parts = model.Part.findByCid(id)
+        val items = model.Item.findByCid(id)
+        val skills = model.Skill.findByCid(id)
+        val relations = model.Relation.findByCid(id)
+        val tensions = model.Tension.findByCid(id)
+        val tags = model.Tag.findByCid(id)
+        Ok(toText(charactor, parts, items, skills, relations))
       }
     }
     ret.merge
+  }
+  def toText(charactor: model.Charactor, parts: List[model.Part], items: List[model.Item], skills: List[model.Skill], relations: List[model.Relation]): String = {
+    val sb = new StringBuilder()
+    sb.append(s"呼び名： ${charactor.name}\r\n")
+    sb.append(s"タイプ： ${util.toClassName(charactor.csClass)}\r\n")
+    sb.append(s"クラス： ${util.toTypeName(charactor.csType)}\r\n")
+    sb.append(s"オーデ： ${util.toEaudeName(charactor.csEaude)}\r\n")
+    sb.append("\r\n")
+    sb.append("■資質\r\n")
+    sb.append("支配\t従順\t打算\t純真\t押し\t察し\t好意\t悪意")
+    for (part <- parts) {
+      sb.append(s"${part.toString}\t")
+    }
+    sb.append("\r\n")
+    sb.append("■アイテム\r\n")
+    sb.append("名前\t主\t副")
+    for(item <- items) {
+      sb.append(s"${item.toString}")
+    }
+    sb.append("\r\n")
+    sb.append("■特技\r\n")
+    sb.append("名前\tﾀｲﾐﾝｸﾞ\tｺｽﾄ\t内容")
+    for(skill <- skills) {
+      sb.append(s"${skill.toString}")
+    }
+    sb.append("\r\n")
+    sb.append("■関係\r\n")
+    sb.append("名前\tﾀｲﾐﾝｸﾞ\tｺｽﾄ\t内容")
+    for(relation <- relations) {
+      sb.append(s"${relation.toString}")
+    }
+    sb.toString
   }
   post("/sheet/:id") {
     val ret = for {
