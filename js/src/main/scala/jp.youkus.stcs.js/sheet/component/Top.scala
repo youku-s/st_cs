@@ -23,6 +23,8 @@ object Top {
     val relationTable = RelationTable.component(scope)
     val password = Password.component(scope)
     val tag = Tag.component(scope)
+    val output = Output.component()
+    val contact = Contact.component()
     val footer = Footer.component()
     val memo = Memo.component(scope)
     def onSave(s: M.Sheet): Callback = Callback {
@@ -90,7 +92,9 @@ object Top {
           <.div(
             ^.classSet("right" -> true),
             password(Password.Prop(onSave(s), onDelete(s), onCreate(s), s.id, s.display, s.usePassword)),
-            tag(Tag.Prop(s.tags))
+            tag(Tag.Prop(s.tags)),
+            output(Output.Prop(s.id)),
+            contact()
           )
         ),
         footer()

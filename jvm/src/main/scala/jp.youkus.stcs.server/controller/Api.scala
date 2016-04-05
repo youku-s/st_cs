@@ -113,6 +113,24 @@ class Api extends ScalatraServlet with ErrorHandler {
     }
     ret.merge
   }
+  get("/sheet/:id/text") {
+    contentType = "text/plane"
+    val ret = for {
+      id <- required(params.get("id")).right
+      charactor <- found(DB.readOnly { implicit s => model.Charactor.find(id) }).right
+    } yield {
+      DB.readOnly { implicit session =>
+        val parts = model.Part.findByCid(id).map(x => json.Sort(x.sort, json.Part(x)))
+        val items = model.Item.findByCid(id).map(x => json.Sort(x.sort, json.Item(x)))
+        val skills = model.Skill.findByCid(id).map(x => json.Sort(x.sort, json.Skill(x)))
+        val relations = model.Relation.findByCid(id).map(x => json.Sort(x.sort, json.Relation(x)))
+        val tensions = model.Tension.findByCid(id).map(x => json.Sort(x.sort, json.Tension(x)))
+        val tags = model.Tag.findByCid(id).map(x => json.Sort(x.sort, x.name))
+        Ok(write(json.response.Sheet(charactor, parts, items, skills, relations, tensions, tags)))
+      }
+    }
+    ret.merge
+  }
   post("/sheet/:id") {
     val ret = for {
       id <- required(params.get("id")).right
