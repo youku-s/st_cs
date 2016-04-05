@@ -113,55 +113,63 @@ class Api extends ScalatraServlet with ErrorHandler {
     }
     ret.merge
   }
-  get("/sheet/:id/text") {
+  get("/sheet/text") {
     contentType = "text/plane"
     val ret = for {
-      id <- required(params.get("id")).right
-      charactor <- found(DB.readOnly { implicit s => model.Charactor.find(id) }).right
+      jd <- required(params.get("q")).right
+      sheet <- withoutError(read[json.request.Sheet](jd)).right
     } yield {
-      DB.readOnly { implicit session =>
-        val parts = model.Part.findByCid(id)
-        val items = model.Item.findByCid(id)
-        val skills = model.Skill.findByCid(id)
-        val relations = model.Relation.findByCid(id)
-        val tensions = model.Tension.findByCid(id)
-        val tags = model.Tag.findByCid(id)
-        Ok(toText(charactor, parts, items, skills, relations))
-      }
+      Ok(toText(sheet))
     }
     ret.merge
   }
-  def toText(charactor: model.Charactor, parts: List[model.Part], items: List[model.Item], skills: List[model.Skill], relations: List[model.Relation]): String = {
+  def toText(sheet: json.request.Sheet): String = {
+    val parts = sheet.parts.map(_.content)
+    val items = sheet.items.map(_.content)
+    val skills = sheet.skills.map(_.content)
+    val relations = sheet.relations.map(_.content)
     val sb = new StringBuilder()
-    sb.append(s"呼び名： ${charactor.name}\r\n")
-    sb.append(s"タイプ： ${util.toClassName(charactor.csClass)}\r\n")
-    sb.append(s"クラス： ${util.toTypeName(charactor.csType)}\r\n")
-    sb.append(s"オーデ： ${util.toEaudeName(charactor.csEaude)}\r\n")
+    sb.append(s"呼び名： ${sheet.name}\r\n")
+    sb.append(s"タイプ： ${util.toClassName(sheet.csClass)}\r\n")
+    sb.append(s"クラス： ${util.toTypeName(sheet.csType)}\r\n")
+    sb.append(s"オーデ： ${util.toEaudeName(sheet.csEaude)}\r\n")
     sb.append("\r\n")
     sb.append("■資質\r\n")
-    sb.append("支配\t従順\t打算\t純真\t押し\t察し\t好意\t悪意")
+    sb.append("支配\t従順\t打算\t純真\t押し\t察し\t好意\t悪意\r\n")
+    val total = model.Talent.calculateTotalTalent(sheet.csClass, sheet.csType, relations, parts)
+    sb.append(s"${total.toString}\r\n")
+    sb.append("\r\n")
+    sb.append("■世界の部品\r\n")
+    sb.append(s"${util.padding("名前", parts.map(_.name.getBytes.size).max)}\t支配\t従順\t打算\t純真\t押し\t察し\t好意\t悪意\r\n")
     for (part <- parts) {
-      sb.append(s"${part.toString}\t")
+      sb.append(s"${part.toString(parts.map(_.name.getBytes.size).max)}\r\n")
     }
     sb.append("\r\n")
     sb.append("■アイテム\r\n")
-    sb.append("名前\t主\t副")
+    sb.append(s"${util.padding("名前", items.map(_.name.getBytes.size).max)}\t主\t副\r\n")
     for(item <- items) {
-      sb.append(s"${item.toString}")
+      sb.append(s"${item.toString(items.map(_.name.getBytes.size).max)}\r\n")
     }
     sb.append("\r\n")
     sb.append("■特技\r\n")
-    sb.append("名前\tﾀｲﾐﾝｸﾞ\tｺｽﾄ\t内容")
+    sb.append(s"${util.padding("名前", skills.map(_.name.getBytes.size).max)}\tﾀｲﾐﾝｸﾞ\tｺｽﾄ\t内容\r\n")
     for(skill <- skills) {
-      sb.append(s"${skill.toString}")
+      sb.append(s"${skill.toString(skills.map(_.name.getBytes.size).max)}\r\n")
     }
     sb.append("\r\n")
     sb.append("■関係\r\n")
-    sb.append("名前\tﾀｲﾐﾝｸﾞ\tｺｽﾄ\t内容")
+    sb.append(s"${util.padding("対象", relations.map(_.to.getBytes.size).max)}\t関係名\t上下\t攻受\r\n")
     for(relation <- relations) {
-      sb.append(s"${relation.toString}")
+      sb.append(s"${relation.toString(relations.map(_.to.getBytes.size).max)}\r\n")
     }
+    sb.append("\r\n")
+    sb.append("■メモ\r\n")
+    sb.append(s"${sheet.memo}\r\n")
     sb.toString
+  }
+  def padding(str: String, max: Int): String = {
+    val length = str.getBytes.size
+    str + " " * (max - length)
   }
   post("/sheet/:id") {
     val ret = for {

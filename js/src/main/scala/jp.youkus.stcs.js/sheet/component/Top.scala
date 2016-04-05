@@ -77,6 +77,13 @@ object Top {
     def render(s: M.Sheet): ReactElement = {
       <.div(
         header(),
+        <.div(
+          ^.classSet("box" -> true),
+          <.a(
+            ^.href := "/lists",
+            "戻る"
+          )
+        ),
         notificationBox(NotificationBox.Prop(s.notification)),
         <.div(
           <.div(
@@ -93,7 +100,7 @@ object Top {
             ^.classSet("right" -> true),
             password(Password.Prop(onSave(s), onDelete(s), onCreate(s), s.id, s.display, s.usePassword)),
             tag(Tag.Prop(s.tags)),
-            output(Output.Prop(s.id)),
+            output(Output.Prop(s)),
             contact()
           )
         ),

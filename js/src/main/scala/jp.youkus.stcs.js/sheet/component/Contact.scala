@@ -9,10 +9,11 @@ object Contact {
     def render() = {
       <.div(
         ^.classSet("box" -> true),
-        <.h2("タグ"),
+        <.h2("管理者へ連絡"),
         <.div(
-          <.div(
-            "入力してEnterを押すとタグが作成されます"
+          <.a(
+            ^.href := "https://twitter.com/intent/tweet?screen_name=youku_s",
+            "ツイッターで連絡する"
           )
         )
       )

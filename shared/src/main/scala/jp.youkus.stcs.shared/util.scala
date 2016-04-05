@@ -38,4 +38,8 @@ object util {
   def toEaudeName(csEaude: Option[Int]): String = {
     csEaude.flatMap(eaudeTable.get).getOrElse("-")
   }
+  def padding(str: String, max: Int): String = {
+    val length = str.getBytes.size
+    str + " " * (max - length)
+  }
 }
