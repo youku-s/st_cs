@@ -11,10 +11,6 @@ object Output {
   case class Prop(
     sheet: M.Sheet
   )
-  def onClick(p: Prop): Callback = Callback {
-    val data = write(M.Sheet.toJson(p.sheet))
-    js.Dynamic.global.window.open(s"/api/sheet/text?q=${data}")
-  }
   class Backend(scope: BackendScope[Prop, Unit]) {
     def render(p: Prop) = {
       <.div(
@@ -22,9 +18,19 @@ object Output {
         <.h2("データ出力"),
         <.div(
           <.div(
-            <.button(
-              ^.onClick --> onClick(p),
-              "テキスト出力"
+            <.form(
+              ^.action := "/api/sheet/output/txt",
+              ^.method := "POST",
+              ^.target := "_blank",
+              <.input(
+                ^.`type` := "hidden",
+                ^.name := "q",
+                ^.value := write(M.Sheet.toJson(p.sheet))
+              ),
+              <.button(
+                ^.`type` := "submit",
+                "テキスト出力"
+              )
             )
           )
         )

@@ -113,8 +113,9 @@ class Api extends ScalatraServlet with ErrorHandler {
     }
     ret.merge
   }
-  get("/sheet/text") {
+  post("/sheet/output/txt") {
     contentType = "text/plane"
+    println(request.body)
     val ret = for {
       jd <- required(params.get("q")).right
       sheet <- withoutError(read[json.request.Sheet](jd)).right
