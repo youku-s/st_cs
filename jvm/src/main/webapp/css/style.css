@@ -114,6 +114,7 @@ table.relation {
   padding: 2px;
   border-radius: 0.5em;
   display: inline-block;
+  line-height: 20px;
 }
 .row {
   margin: 5px;

@@ -10,7 +10,7 @@ lazy val root = (crossProject in file("."))
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
     ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
   )
-  .settings(
+  .jsSettings(
     (Seq(fastOptJS, fullOptJS, packageJSDependencies) map { packageJSKey =>
       crossTarget in(Compile, packageJSKey) := file("./jvm") / "src" / "main" / "webapp" / "js"
     }): _*

@@ -11,7 +11,7 @@
     <div id="main">
     </div>
     <script type="text/javascript" src="/js/stcs-jsdeps.js"></script>
-    <script type="text/javascript" src="/js/stcs-fastopt.js"></script>
+    <script type="text/javascript" src="/js/stcs-opt.js"></script>
     <script type="text/javascript">
       jp.youkus.stcs.js.list.Main().main();
     </script>
