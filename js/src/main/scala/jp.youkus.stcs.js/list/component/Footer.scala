@@ -9,13 +9,7 @@ object Footer {
     def render = {
       <.div(
         ^.classSet("footer" -> true),
-        "「",
-        <.a(
-          ^.href := "http://www6.plala.or.jp/scrafts/glexb/",
-          ^.target := "_blank",
-          "少女展爛会"
-        ),
-        "」はSimple Crafts様の著作物です。"
+        "(c) 2016 よーく"
       )
     }
   }

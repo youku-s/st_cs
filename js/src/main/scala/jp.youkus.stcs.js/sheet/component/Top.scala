@@ -31,7 +31,7 @@ object Top {
       s.id match {
         case Some(id) => {
           if (s.name.isEmpty) {
-            scope.modState(s => s.copy(notification = Some(M.Normal("呼び名を入力してください。")))).runNow()
+            scope.modState(s => s.copy(notification = Some(M.Error("呼び名を入力してください。")))).runNow()
           } else {
             val f = Ajax.post(s"/api/sheet/${id}", write(M.Sheet.toJson(s)))
             f.onSuccess { case xhr =>
@@ -48,12 +48,14 @@ object Top {
     def onDelete(s: M.Sheet): Callback = Callback {
       s.id match {
         case Some(id) => {
-          val f = Ajax.delete(s"/api/sheet/${id}", write(json.Password(s.password)))
-          f.onSuccess { case xhr =>
-            println("delete success")
-          }
-          f.onFailure { case _ =>
-            scope.modState(s => s.copy(notification = Some(M.Error("パスワードが一致しませんでした。")))).runNow()
+          if (js.Dynamic.global.confirm("キャラクターシートを削除しますが、よろしいですか。").asInstanceOf[Boolean]) {
+            val f = Ajax.delete(s"/api/sheet/${id}", write(json.Password(s.password)))
+            f.onSuccess { case xhr =>
+              js.Dynamic.global.location.href = "/lists";
+            }
+            f.onFailure { case _ =>
+              scope.modState(s => s.copy(notification = Some(M.Error("パスワードが一致しませんでした。")))).runNow()
+            }
           }
         }
         case None => // do nothing
@@ -61,7 +63,7 @@ object Top {
     }
     def onCreate(s: M.Sheet): Callback = Callback {
       if (s.name.isEmpty) {
-        scope.modState(s => s.copy(notification = Some(M.Normal("呼び名を入力してください。")))).runNow()
+        scope.modState(s => s.copy(notification = Some(M.Error("呼び名を入力してください。")))).runNow()
       } else {
         val f = Ajax.post("/api/sheet", write(M.Sheet.toJson(s)))
         f.onSuccess { case xhr =>
@@ -88,7 +90,7 @@ object Top {
         <.div(
           <.div(
             ^.classSet("left" -> true),
-            baseTable(BaseTable.Prop(s.name, s.csClass, s.csType, s.csEaude)),
+            baseTable(BaseTable.Prop(s.name, s.id, s.csClass, s.csType, s.csEaude)),
             talentTable(TalentTable.Prop(s.csClass, s.csType, s.relations, s.parts)),
             tensionGage(TensionGage.Prop(s.tensions)),
             itemTable(ItemTable.Prop(s.items)),

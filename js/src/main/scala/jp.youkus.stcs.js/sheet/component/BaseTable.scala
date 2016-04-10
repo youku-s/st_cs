@@ -1,6 +1,7 @@
 package jp.youkus.stcs.js.sheet.component
 
 import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB, ReactElement, ReactEventI}
+import japgolly.scalajs.react.vdom.EmptyTag
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.prefix_<^.{<, ^}
 import jp.youkus.stcs.js.{model => M}
@@ -8,6 +9,7 @@ import jp.youkus.stcs.js.{model => M}
 object BaseTable {
   case class Prop(
     name: String,
+    id: Option[String],
     csClass: Option[Int],
     csType: Option[Int],
     csEaude: Option[Int]
@@ -34,6 +36,14 @@ object BaseTable {
       <.div(
         ^.classSet("box" -> true),
         <.h2("基本"),
+        p.id match {
+          case Some(id) =>
+            <.div(
+              ^.classSet("sheetId" -> true),
+              <.span(s"ID: ${id}")
+            )
+          case None => EmptyTag
+        },
         <.div(
           <.table(
             <.tbody(

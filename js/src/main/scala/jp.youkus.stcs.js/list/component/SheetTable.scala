@@ -23,23 +23,23 @@ object SheetTable {
                 "呼び名"
               ),
               <.th(
-                ^.style := js.Dictionary("width" -> "15%"),
+                ^.style := js.Dictionary("width" -> "12%"),
                 "クラス"
               ),
               <.th(
-                ^.style := js.Dictionary("width" -> "15%"),
+                ^.style := js.Dictionary("width" -> "12%"),
                 "タイプ"
               ),
               <.th(
-                ^.style := js.Dictionary("width" -> "15%"),
+                ^.style := js.Dictionary("width" -> "12%"),
                 "オーデ"
               ),
               <.th(
-                ^.style := js.Dictionary("width" -> "20%"),
+                ^.style := js.Dictionary("width" -> "26%"),
                 "タグ"
               ),
               <.th(
-                ^.style := js.Dictionary("width" -> "15%"),
+                ^.style := js.Dictionary("width" -> "18%"),
                 "最終更新"
               )
             )
