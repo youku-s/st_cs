@@ -11,7 +11,8 @@ import scala.scalajs.js
 object Search {
   class Backend(scope: BackendScope[Unit, String], pScope: BackendScope[Unit, Top.State]) {
     def onChange(e: ReactEventI): Callback = {
-      scope.setState(e.target.value)
+      val value = e.target.value
+      scope.setState(value)
     }
     def onKeyDown(text: String)(e: ReactKeyboardEventI): Callback = {
       if (e.keyCode == 13) {

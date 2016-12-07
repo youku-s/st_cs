@@ -16,10 +16,11 @@ object TalentTable {
   )
   class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.Sheet]) {
     def onChange(index: Int, f: (M.Part, String) => M.Part)(e: ReactEventI): Callback = {
+      val value = e.target.value
       pScope.modState(s => 
         s.copy(
           parts = s.parts.get(index) match {
-            case Some(p) => s.parts + (index -> f(p, e.target.value))
+            case Some(p) => s.parts + (index -> f(p, value))
             case None => s.parts
           }
         )

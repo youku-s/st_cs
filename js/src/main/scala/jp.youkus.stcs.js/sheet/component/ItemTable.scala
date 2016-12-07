@@ -13,10 +13,11 @@ object ItemTable {
   )
   class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.Sheet]) {
     def onChange(index: Int, f: (M.Item, String) => M.Item)(e: ReactEventI): Callback = {
+      val value = e.target.value
       pScope.modState(s => 
         s.copy(
           items = s.items.get(index) match {
-            case Some(p) => s.items + (index -> f(p, e.target.value))
+            case Some(p) => s.items + (index -> f(p, value))
             case None => s.items
           }
         )

@@ -17,7 +17,8 @@ object Password {
   )
   class Backend(scope: BackendScope[Prop, Boolean], pScope: BackendScope[Unit, M.Sheet]) {
     def onPasswordChange(e: ReactEventI): Callback = {
-      pScope.modState(s => s.copy(password = Some(e.target.value)))
+      val value = e.target.value
+      pScope.modState(s => s.copy(password = Some(value)))
     }
     def onCheck(display: Boolean): Callback = {
       pScope.modState(s => s.copy(display = !display))

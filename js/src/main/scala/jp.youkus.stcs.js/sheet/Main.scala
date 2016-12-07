@@ -5,16 +5,9 @@ import jp.youkus.stcs.js.sheet.{component => C}
 import jp.youkus.stcs.shared.json
 import org.scalajs.dom.document
 import org.scalajs.dom.ext.Ajax
-import scala.scalajs.js
-import scala.scalajs.js.JSApp
-import scala.scalajs.js.annotation.JSExport
 import upickle.default.read
 
-@JSExport
-object Main extends JSApp {
-  def main(): Unit = {
-  }
-  @JSExport
+object Main {
   def render(id: String): Unit = {
     if (id.isEmpty) {
       val top = C.Top.component(None)

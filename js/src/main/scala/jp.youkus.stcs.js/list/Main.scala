@@ -8,9 +8,7 @@ import scala.scalajs.js
 import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
 
-@JSExport
-object Main extends JSApp {
-  @JSExport
+object Main {
   def main(): Unit = {
     C.Top.getSheets(0).onSuccess { case state => 
       val top = C.Top.component(state)

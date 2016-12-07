@@ -11,7 +11,8 @@ object Memo {
   )
   class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.Sheet]) {
     def onChange(e: ReactEventI): Callback = {
-      pScope.modState(s => s.copy(memo = e.target.value))
+      val value = e.target.value
+      pScope.modState(s => s.copy(memo = value))
     }
     def render(p: Prop) = {
       <.div(

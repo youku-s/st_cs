@@ -13,10 +13,11 @@ object SkillTable {
   )
   class Backend(scope: BackendScope[Prop, Unit], pScope: BackendScope[Unit, M.Sheet]) {
     def onChange(index: Int, f: (M.Skill, String) => M.Skill)(e: ReactEventI): Callback = {
+      val value = e.target.value
       pScope.modState(s =>
         s.copy(
           skills = s.skills.get(index) match {
-            case Some(p) => s.skills + (index -> f(p, e.target.value))
+            case Some(p) => s.skills + (index -> f(p, value))
             case None => s.skills
           }
         )

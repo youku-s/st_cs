@@ -21,16 +21,20 @@ object BaseTable {
       case e: Exception => None
     }
     def onNameChange(e: ReactEventI): Callback = {
-      pScope.modState(_.copy(name = e.target.value))
+      val value = e.target.value
+      pScope.modState(_.copy(name = value))
     }
     def onClassChange(e: ReactEventI): Callback = {
-      pScope.modState(_.copy(csClass = toIntOpt(e.target.value)))
+      val value = e.target.value
+      pScope.modState(_.copy(csClass = toIntOpt(value)))
     }
     def onTypeChange(e: ReactEventI): Callback = {
-      pScope.modState(_.copy(csType = toIntOpt(e.target.value)))
+      val value = e.target.value
+      pScope.modState(_.copy(csType = toIntOpt(value)))
     }
     def onEaudeChange(e: ReactEventI): Callback = {
-      pScope.modState(_.copy(csEaude = toIntOpt(e.target.value)))
+      val value = e.target.value
+      pScope.modState(_.copy(csEaude = toIntOpt(value)))
     }
     def render(p: Prop) = {
       <.div(

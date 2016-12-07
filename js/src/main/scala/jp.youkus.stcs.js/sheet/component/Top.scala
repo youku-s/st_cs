@@ -69,6 +69,8 @@ object Top {
         f.onSuccess { case xhr =>
           val result = read[json.response.Sheet](xhr.responseText)
           val sheet = M.Sheet.fromJson(result).copy(notification = Some(M.Normal("保存しました。")))
+          // ここでIDは必ずとれる。
+          org.scalajs.dom.window.history.pushState("", "", s"sheet/${sheet.id.get}")
           scope.setState(sheet).runNow()
         }
         f.onFailure { case _ =>
@@ -82,7 +84,7 @@ object Top {
         <.div(
           ^.classSet("box" -> true),
           <.a(
-            ^.href := "/lists",
+            ^.href := "/",
             "戻る"
           )
         ),

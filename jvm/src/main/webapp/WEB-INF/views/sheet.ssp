@@ -12,10 +12,10 @@
   <body>
     <div id="main">
     </div>
-    <script type="text/javascript" src="/js/stcs-jsdeps.js"></script>
-    <script type="text/javascript" src="/js/stcs-opt.js"></script>
+    <script type="text/javascript" src="/js/stcs-jsdeps.js?20161207"></script>
+    <script type="text/javascript" src="/js/stcs-fastopt.js?20161207"></script>
     <script type="text/javascript">
-      jp.youkus.stcs.js.sheet.Main().render("<%= id %>");
+      jp.youkus.stcs.js.Main().renderSheet("<%= id %>");
     </script>
   </body>
 </html>

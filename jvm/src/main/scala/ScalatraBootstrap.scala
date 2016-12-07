@@ -7,7 +7,7 @@ import scalikejdbc.config.DBs
 class ScalatraBootstrap extends LifeCycle {
   DBs.setupAll()
   override def init(context: ServletContext) {
-    context.mount(new Lists, "/lists/*")
+    context.mount(new Lists, "/*")
     context.mount(new Sheet, "/sheet/*")
     context.mount(new Api, "/api/*")
   }

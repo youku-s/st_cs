@@ -21,7 +21,8 @@ object Tag {
       )
     }
     def onChange(e: ReactEventI): Callback = {
-      scope.setState(e.target.value)
+      val value = e.target.value
+      scope.setState(value)
     }
     def onKeyDown(tag: String)(e: ReactKeyboardEventI): Callback = {
       if (e.keyCode == 13) {

@@ -83,6 +83,9 @@ lazy val shared = project
   )
 lazy val jvm = root.jvm
   .settings(
+    scalaJSProjects := Seq(js),
+    pipelineStages in Assets := Seq(scalaJSPipeline),
+    compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
     mainClass in(Compile, run) := Some("JettyLauncher"),
     scalateTemplateConfig in Compile := {
       Seq(
@@ -95,17 +98,11 @@ lazy val jvm = root.jvm
       )
     }
   )
-  .enablePlugins(JettyPlugin)
-  .enablePlugins(JavaAppPackaging)
+  .enablePlugins(SbtWeb, JettyPlugin, JavaAppPackaging)
   .dependsOn(shared)
 
 lazy val js = root.js
-  .enablePlugins(ScalaJSPlugin)
+  .enablePlugins(ScalaJSPlugin, ScalaJSWeb)
   .dependsOn(shared)
 
 onLoad in Global := (Command.process("project rootJVM", _: State)) compose (onLoad in Global).value
-
-lazy val fullOptJsTask = TaskKey[Unit]("fullOptJsTask", "")
-
-fullOptJsTask := {
-}
