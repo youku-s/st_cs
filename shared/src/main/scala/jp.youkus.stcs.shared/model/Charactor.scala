@@ -1,24 +1,26 @@
 package jp.youkus.stcs.shared.model
 
 import org.joda.time.DateTime
-import scalikejdbc.{DBSession, ResultName, SQLSyntaxSupport, WrappedResultSet, insert, select, update, delete, withSQL, sqls}
+import scalikejdbc._
 import java.security.{MessageDigest, SecureRandom}
 
 case class Charactor(
-  id: String,
-  name: String,
-  csClass: Option[Int],
-  csType: Option[Int],
-  csEaude: Option[Int],
-  memo: String,
-  password: Option[String],
-  display: Boolean,
-  createDate: DateTime,
-  updateDate: Option[DateTime]
-)
+                      id: String,
+                      name: String,
+                      csClass: Option[Int],
+                      csType: Option[Int],
+                      csEaude: Option[Int],
+                      memo: String,
+                      password: Option[String],
+                      display: Boolean,
+                      createDate: DateTime,
+                      updateDate: Option[DateTime]
+                    )
+
 object Charactor extends SQLSyntaxSupport[Charactor] {
   override val tableName = "CHARACTOR"
   override val columns = Seq("ID", "NAME", "CS_CLASS", "CS_TYPE", "CS_EAUDE", "MEMO", "PASSWORD", "DISPLAY", "CREATE_DATE", "UPDATE_DATE")
+
   def apply(c: ResultName[Charactor])(rs: WrappedResultSet): Charactor = Charactor(
     id = rs.string(c.id),
     name = rs.string(c.name),
@@ -31,12 +33,14 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
     createDate = rs.jodaDateTime(c.createDate),
     updateDate = rs.jodaDateTimeOpt(c.updateDate)
   )
+
   def find(id: String)(implicit session: DBSession): Option[Charactor] = {
     val c = Charactor.syntax("c")
     withSQL {
       select.from(Charactor as c).where.eq(c.id, id)
     }.map(Charactor(c.resultName)).single().apply()
   }
+
   def lists(limit: Int, offset: Int, tags: Option[Seq[String]])(implicit session: DBSession): (Int, List[Charactor]) = {
     val c = Charactor.syntax("c")
     val t = Tag.syntax("t")
@@ -61,20 +65,20 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
         println(ts)
         val count = withSQL {
           select[Int](sqls.count).from(Charactor as c)
-            .innerJoin(Tag as t).on(c.id, t.cid) 
+            .innerJoin(Tag as t).on(c.id, t.cid)
             .where
-              .eq(c.display, true)
-              .and
-              .in(t.name, ts)
+            .eq(c.display, true)
+            .and
+            .in(t.name, ts)
         }.map(rs => rs.int(1)).single.apply()
         println(count)
         val sheets = withSQL {
           select.from(Charactor as c)
-            .innerJoin(Tag as t).on(c.id, t.cid) 
+            .innerJoin(Tag as t).on(c.id, t.cid)
             .where
-              .eq(c.display, true)
-              .and
-              .in(t.name, ts)
+            .eq(c.display, true)
+            .and
+            .in(t.name, ts)
             .orderBy(c.updateDate).desc
             .limit(limit)
             .offset(offset)
@@ -83,15 +87,16 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
       }
     }
   }
+
   def create(
-    name: String,
-    csClass: Option[Int],
-    csType: Option[Int],
-    csEaude: Option[Int],
-    memo: String,
-    display: Boolean,
-    password: Option[String]
-  )(implicit session: DBSession): Charactor = {
+              name: String,
+              csClass: Option[Int],
+              csType: Option[Int],
+              csEaude: Option[Int],
+              memo: String,
+              display: Boolean,
+              password: Option[String]
+            )(implicit session: DBSession): Charactor = {
     val createDate = DateTime.now
     val id = java.util.UUID.randomUUID.toString
     val hashed = password.map(toHash)
@@ -117,7 +122,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
         hashed,
         display,
         createDate,
-        Some(createDate)
+        None
       )
     }.update.apply()
     Charactor(
@@ -130,19 +135,20 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
       password = hashed,
       display = display,
       createDate = createDate,
-      updateDate = Some(createDate)
+      None
     )
   }
+
   def updateDetail(
-    id: String,
-    name: String,
-    csClass: Option[Int],
-    csType: Option[Int],
-    csEaude: Option[Int],
-    memo: String,
-    display: Boolean,
-    password: Option[String]
-  )(implicit session: DBSession): Charactor = {
+                    id: String,
+                    name: String,
+                    csClass: Option[Int],
+                    csType: Option[Int],
+                    csEaude: Option[Int],
+                    memo: String,
+                    display: Boolean,
+                    password: Option[String]
+                  )(implicit session: DBSession): Charactor = {
     withSQL {
       update(Charactor).set(
         Charactor.column.name -> name,
@@ -152,17 +158,19 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
         Charactor.column.memo -> memo,
         Charactor.column.password -> password.map(toHash),
         Charactor.column.display -> display,
-        Charactor.column.updateDate -> Some(DateTime.now)
+        Charactor.column.updateDate -> DateTime.now
       ).where.eq(Charactor.column.id, id)
     }.update.apply()
     find(id).get
   }
+
   def remove(id: String)(implicit session: DBSession): Boolean = {
     val count = withSQL {
       delete.from(Charactor).where.eq(Charactor.column.id, id)
     }.update.apply()
     count > 0
   }
+
   def toHash(password: String): String = {
     val digest = MessageDigest.getInstance("SHA-512")
     digest.digest(password.getBytes).map(x => "%02x".format(x)).mkString

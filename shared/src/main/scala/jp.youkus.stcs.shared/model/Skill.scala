@@ -1,6 +1,6 @@
 package jp.youkus.stcs.shared.model
 
-import scalikejdbc.{DBSession, ResultName, SQLSyntaxSupport, WrappedResultSet, insert, select, delete, withSQL}
+import scalikejdbc._
 
 case class Skill(
   id: String,

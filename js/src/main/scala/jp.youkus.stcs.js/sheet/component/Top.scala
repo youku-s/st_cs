@@ -114,6 +114,6 @@ object Top {
     ReactComponentB[Unit]("Top")
       .initialState(sheet.map(M.Sheet.fromJson).getOrElse(M.Sheet.initialValue))
       .renderBackend[Top.Backend]
-      .buildU
+      .build
   }
 }

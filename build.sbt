@@ -1,12 +1,12 @@
-lazy val scalatraVersion = "2.3.1"
-
+lazy val scalatraVersion = "2.4.0"
+lazy val ScalaVersion = "2.11.8"
 lazy val root = (crossProject in file("."))
   .enablePlugins(ScalaJSPlugin)
   .settings(
     organization := "jp.youkus",
     name := "stcs",
     version := "0.1.0",
-    scalaVersion := "2.11.8",
+    scalaVersion := ScalaVersion,
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
     ivyScala := ivyScala.value map {
       _.copy(overrideScalaVersion = true)
@@ -63,7 +63,7 @@ lazy val shared = project
     organization := "jp.youkus",
     name := "stcs_share",
     version := "0.1.0",
-    scalaVersion := "2.11.8",
+    scalaVersion := ScalaVersion,
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
     ivyScala := ivyScala.value map {
       _.copy(overrideScalaVersion = true)
@@ -76,4 +76,5 @@ lazy val shared = project
 lazy val jvm = root.jvm
   .dependsOn(shared)
 lazy val js = root.js
+  .enablePlugins(ScalaJSPlugin, ScalaJSWeb)
   .dependsOn(shared)

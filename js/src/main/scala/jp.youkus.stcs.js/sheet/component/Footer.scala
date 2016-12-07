@@ -17,6 +17,6 @@ object Footer {
     ReactComponentB[Unit]("Footer")
       .stateless
       .renderBackend[Footer.Backend]
-      .buildU
+      .build
   }
 }

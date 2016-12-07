@@ -35,6 +35,6 @@ object Header {
     ReactComponentB[Unit]("Header")
       .stateless
       .renderBackend[Header.Backend]
-      .buildU
+      .build
   }
 }

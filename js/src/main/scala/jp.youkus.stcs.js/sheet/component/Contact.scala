@@ -24,6 +24,6 @@ object Contact {
     ReactComponentB[Unit]("Contact")
       .stateless
       .renderBackend[Contact.Backend]
-      .buildU
+      .build
   }
 }

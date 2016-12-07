@@ -50,6 +50,6 @@ object Search {
       .initialState("")
       .backend(scope => new Search.Backend(scope, pScope))
       .renderBackend
-      .buildU
+      .build
   }
 }

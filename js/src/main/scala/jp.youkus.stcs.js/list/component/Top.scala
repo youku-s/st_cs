@@ -57,6 +57,6 @@ object Top {
     ReactComponentB[Unit]("Top")
       .initialState(initialState)
       .renderBackend[Top.Backend]
-      .buildU
+      .build
   }
 }
