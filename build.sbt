@@ -1,7 +1,11 @@
+import org.scalatra.sbt._
+import org.scalatra.sbt.PluginKeys._
+import com.mojolly.scalate.ScalatePlugin._
+import ScalateKeys._
+
 lazy val scalatraVersion = "2.4.0"
 lazy val ScalaVersion = "2.11.8"
 lazy val root = (crossProject in file("."))
-  .enablePlugins(ScalaJSPlugin)
   .settings(
     organization := "jp.youkus",
     name := "stcs",
@@ -17,6 +21,8 @@ lazy val root = (crossProject in file("."))
       crossTarget in(Compile, packageJSKey) := file("./jvm") / "src" / "main" / "webapp" / "js"
     }): _*
   )
+  .jvmSettings(ScalatraPlugin.scalatraSettings)
+  .jvmSettings(scalateSettings)
   .jvmSettings(
     libraryDependencies ++= Seq(
       "org.scalatra" %% "scalatra" % scalatraVersion,
@@ -28,11 +34,14 @@ lazy val root = (crossProject in file("."))
       "org.scalikejdbc" %% "scalikejdbc-config" % "2.5.0",
       "ch.qos.logback" % "logback-classic" % "1.1.7",
       "mysql" % "mysql-connector-java" % "5.1.38",
-      "com.lihaoyi" %% "upickle" % "0.4.3"
+      "com.lihaoyi" %% "upickle" % "0.4.3",
+      "com.heroku.sdk" % "heroku-jdbc" % "0.1.1",
+      "postgresql" % "postgresql" % "9.4.1208-jdbc42-atlassian-hosted"
     )
   )
-  .jvmSettings(jetty(): _*)
   .jsSettings(
+    persistLauncher := true,
+    persistLauncher in Test := false,
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "0.9.1",
       "com.github.japgolly.scalajs-react" %%% "core" % "0.11.3",
@@ -57,7 +66,6 @@ lazy val root = (crossProject in file("."))
         commonJSName "ReactDOMServer"
     )
   )
-  .enablePlugins(JavaAppPackaging)
 lazy val shared = project
   .settings(
     organization := "jp.youkus",
@@ -74,7 +82,30 @@ lazy val shared = project
     )
   )
 lazy val jvm = root.jvm
+  .settings(
+    mainClass in(Compile, run) := Some("JettyLauncher"),
+    scalateTemplateConfig in Compile := {
+      Seq(
+        TemplateConfig(
+          file(".") / "jvm" / "src" / "main" / "webapp" / "WEB-INF" / "views",
+          Seq.empty,
+          Seq.empty,
+          Some("templates")
+        )
+      )
+    }
+  )
+  .enablePlugins(JettyPlugin)
+  .enablePlugins(JavaAppPackaging)
   .dependsOn(shared)
+
 lazy val js = root.js
-  .enablePlugins(ScalaJSPlugin, ScalaJSWeb)
+  .enablePlugins(ScalaJSPlugin)
   .dependsOn(shared)
+
+onLoad in Global := (Command.process("project rootJVM", _: State)) compose (onLoad in Global).value
+
+lazy val fullOptJsTask = TaskKey[Unit]("fullOptJsTask", "")
+
+fullOptJsTask := {
+}

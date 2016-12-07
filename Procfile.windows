@@ -1,1 +1,1 @@
-web: jvm\target\universal\stage\bin\dakatsu.bat -Dhttp.port=%PORT% -Dplay.evolutions.db.default.autoApply=true
+web: jvm\target\universal\stage\bin\stcs.bat -Dhttp.port=%PORT%
