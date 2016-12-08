@@ -124,30 +124,30 @@ object TalentTable {
               <.tr(
                 <.th(
                   ^.rowSpan := "2",
-                  ^.style := js.Dictionary("width" -> "20%")
+                  ^.style := js.Dictionary("width" -> "25%")
                 ),
                 <.th(
                   ^.colSpan := "4",
-                  ^.style := js.Dictionary("width" -> "30%"),
+                  ^.style := js.Dictionary("width" -> "20%"),
                   "資質"
                 ),
                 <.th(
                   ^.colSpan := "2",
-                  ^.style := js.Dictionary("width" -> "15%"),
+                  ^.style := js.Dictionary("width" -> "10%"),
                   "傾き"
                 ),
                 <.th(
                   ^.colSpan := "2",
-                  ^.style := js.Dictionary("width" -> "15%"),
+                  ^.style := js.Dictionary("width" -> "10%"),
                   "慎み"
                 ),
                 <.th(
                   ^.classSet("noborder" -> true),
-                  ^.style := js.Dictionary("width" -> "15%")
+                  ^.style := js.Dictionary("width" -> "25%")
                 ),
                 <.td(
                   ^.classSet("noborder" -> true),
-                  ^.style := js.Dictionary("width" -> "5%")
+                  ^.style := js.Dictionary("width" -> "10%")
                 )
               ),
               <.tr(
