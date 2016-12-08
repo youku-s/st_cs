@@ -51,7 +51,7 @@ object Top {
           if (js.Dynamic.global.confirm("キャラクターシートを削除しますが、よろしいですか。").asInstanceOf[Boolean]) {
             val f = Ajax.delete(s"/api/sheet/${id}", write(json.Password(s.password)))
             f.onSuccess { case xhr =>
-              js.Dynamic.global.location.href = "/lists";
+              js.Dynamic.global.location.href = "/";
             }
             f.onFailure { case _ =>
               scope.modState(s => s.copy(notification = Some(M.Error("パスワードが一致しませんでした。")))).runNow()
