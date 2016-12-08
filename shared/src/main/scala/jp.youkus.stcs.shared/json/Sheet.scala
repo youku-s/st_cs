@@ -63,7 +63,7 @@ object response {
       usePassword = charactor.password.isDefined,
       tags = tags,
       display = charactor.display,
-      updateDate = charactor.updateDate.map(_.toString(DateTimeFormat.mediumDateTime())).getOrElse("-")
+      updateDate = charactor.updateDate.toString(DateTimeFormat.mediumDateTime())
     )
   }
 }

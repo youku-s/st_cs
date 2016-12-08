@@ -14,12 +14,13 @@ case class Charactor(
                       password: Option[String],
                       display: Boolean,
                       createDate: DateTime,
-                      updateDate: Option[DateTime]
+                      updateDate: DateTime,
+                      deleteDate: Option[DateTime] = None
                     )
 
 object Charactor extends SQLSyntaxSupport[Charactor] {
   override val tableName = "CHARACTOR"
-  override val columns = Seq("ID", "NAME", "CS_CLASS", "CS_TYPE", "CS_EAUDE", "MEMO", "PASSWORD", "DISPLAY", "CREATE_DATE", "UPDATE_DATE")
+  override val columns = Seq("ID", "NAME", "CS_CLASS", "CS_TYPE", "CS_EAUDE", "MEMO", "PASSWORD", "DISPLAY", "CREATE_DATE", "UPDATE_DATE", "DELETE_DATE")
 
   def apply(c: ResultName[Charactor])(rs: WrappedResultSet): Charactor = Charactor(
     id = rs.string(c.id),
@@ -31,13 +32,14 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
     password = rs.stringOpt(c.password),
     display = rs.boolean(c.display),
     createDate = rs.jodaDateTime(c.createDate),
-    updateDate = rs.jodaDateTimeOpt(c.updateDate)
+    updateDate = rs.jodaDateTime(c.updateDate),
+    deleteDate = rs.jodaDateTimeOpt(c.deleteDate)
   )
 
   def find(id: String)(implicit session: DBSession): Option[Charactor] = {
     val c = Charactor.syntax("c")
     withSQL {
-      select.from(Charactor as c).where.eq(c.id, id)
+      select.from(Charactor as c).where.eq(c.id, id).and.isNull(c.deleteDate)
     }.map(Charactor(c.resultName)).single().apply()
   }
 
@@ -50,11 +52,15 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
           select[Int](sqls.count).from(Charactor as c)
             .where
             .eq(c.display, true)
+            .and
+            .isNull(c.deleteDate)
         }.map(rs => rs.int(1)).single.apply()
         val sheets = withSQL {
           select.from(Charactor as c)
             .where
             .eq(c.display, true)
+            .and
+            .isNull(c.deleteDate)
             .orderBy(c.updateDate).desc
             .limit(limit)
             .offset(offset)
@@ -62,12 +68,13 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
         (count.getOrElse(0), sheets)
       }
       case Some(ts) => {
-        println(ts)
         val count = withSQL {
           select[Int](sqls.count).from(Charactor as c)
             .innerJoin(Tag as t).on(c.id, t.cid)
             .where
             .eq(c.display, true)
+            .and
+            .isNull(c.deleteDate)
             .and
             .in(t.name, ts)
         }.map(rs => rs.int(1)).single.apply()
@@ -77,6 +84,8 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
             .innerJoin(Tag as t).on(c.id, t.cid)
             .where
             .eq(c.display, true)
+            .and
+            .isNull(c.deleteDate)
             .and
             .in(t.name, ts)
             .orderBy(c.updateDate).desc
@@ -122,7 +131,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
         hashed,
         display,
         createDate,
-        None
+        createDate
       )
     }.update.apply()
     Charactor(
@@ -135,7 +144,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
       password = hashed,
       display = display,
       createDate = createDate,
-      None
+      updateDate = createDate
     )
   }
 
@@ -166,7 +175,9 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
 
   def remove(id: String)(implicit session: DBSession): Boolean = {
     val count = withSQL {
-      delete.from(Charactor).where.eq(Charactor.column.id, id)
+      update(Charactor).set(
+        Charactor.column.deleteDate -> DateTime.now
+      ).where.eq(Charactor.column.id, id)
     }.update.apply()
     count > 0
   }
