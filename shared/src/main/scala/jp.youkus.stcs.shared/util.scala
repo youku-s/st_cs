@@ -39,7 +39,7 @@ object util {
     csEaude.flatMap(eaudeTable.get).getOrElse("-")
   }
   def padding(str: String, max: Int): String = {
-    val length = str.getBytes.size
+    val length = str.getBytes("Shift_JIS").size
     str + " " * (max - length)
   }
 }

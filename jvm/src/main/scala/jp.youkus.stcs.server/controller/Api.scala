@@ -137,41 +137,42 @@ class Api extends ScalatraServlet with ErrorHandler {
     sb.append(s"オーデ： ${util.toEaudeName(sheet.csEaude)}\r\n")
     sb.append("\r\n")
     sb.append("■資質\r\n")
-    sb.append("支配\t従順\t打算\t純真\t押し\t察し\t好意\t悪意\r\n")
+    sb.append("支配 従順 打算 純真 押し 察し 好意 悪意\r\n")
     val total = model.Talent.calculateTotalTalent(sheet.csClass, sheet.csType, relations, parts)
     sb.append(s"${total.toString}\r\n")
     sb.append("\r\n")
     sb.append("■世界の部品\r\n")
-    sb.append(s"${util.padding("名前", parts.map(_.name.getBytes.size).max)}\t支配\t従順\t打算\t純真\t押し\t察し\t好意\t悪意\t効果\r\n")
+    val partNameMax = math.max(parts.map(_.name.getBytes("Shift_JIS").size).max, 4)
+    sb.append(s"${util.padding("名前", partNameMax)} 支配 従順 打算 純真 押し 察し 好意 悪意 効果\r\n")
     for (part <- parts) {
-      sb.append(s"${part.toString(parts.map(_.name.getBytes.size).max)}\r\n")
+      sb.append(s"${part.toString(partNameMax)}\r\n")
     }
     sb.append("\r\n")
     sb.append("■アイテム\r\n")
-    sb.append(s"${util.padding("名前", items.map(_.name.getBytes.size).max)}\t主\t副\r\n")
+    val itemNameMax = math.max(items.map(_.name.getBytes("Shift_JIS").size).max, 4)
+    sb.append(s"${util.padding("名前", itemNameMax)} 主 副\r\n")
     for(item <- items) {
-      sb.append(s"${item.toString(items.map(_.name.getBytes.size).max)}\r\n")
+      sb.append(s"${item.toString(itemNameMax)}\r\n")
     }
     sb.append("\r\n")
     sb.append("■特技\r\n")
-    sb.append(s"${util.padding("名前", skills.map(_.name.getBytes.size).max)}\tﾀｲﾐﾝｸﾞ\tｺｽﾄ\t内容\r\n")
+    val skillNameMax = math.max(skills.map(_.name.getBytes("Shift_JIS").size).max, 4)
+    sb.append(s"${util.padding("名前", skillNameMax)} ﾀｲﾐﾝｸﾞ ｺｽﾄ 内容\r\n")
     for(skill <- skills) {
-      sb.append(s"${skill.toString(skills.map(_.name.getBytes.size).max)}\r\n")
+      sb.append(s"${skill.toString(skillNameMax)}\r\n")
     }
     sb.append("\r\n")
     sb.append("■関係\r\n")
-    sb.append(s"${util.padding("対象", relations.map(_.to.getBytes.size).max)}\t関係名\t上下\t攻受\r\n")
+    val toNameMax = math.max(relations.map(_.to.getBytes("Shift_JIS").size).max, 4)
+    val relNameMax = math.max(relations.map(_.name.getBytes("Shift_JIS").size).max, 6)
+    sb.append(s"${util.padding("対象", toNameMax)} ${util.padding("関係名", relNameMax)} 上下 攻受\r\n")
     for(relation <- relations) {
-      sb.append(s"${relation.toString(relations.map(_.to.getBytes.size).max)}\r\n")
+      sb.append(s"${relation.toString(toNameMax, relNameMax)}\r\n")
     }
     sb.append("\r\n")
     sb.append("■メモ\r\n")
     sb.append(s"${sheet.memo}\r\n")
     sb.toString
-  }
-  def padding(str: String, max: Int): String = {
-    val length = str.getBytes.size
-    str + " " * (max - length)
   }
   post("/sheet/:id") {
     val ret = for {

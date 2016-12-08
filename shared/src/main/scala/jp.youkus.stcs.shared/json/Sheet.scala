@@ -87,11 +87,11 @@ case class Part(
                  others: String
                ) {
   def toString(max: Int): String = {
-    s"${util.padding(name, max)}\t${strip(shihai)}\t${strip(jyujyun)}\t${strip(dasan)}\t${strip(jyunshin)}\t${strip(oshi)}\t${strip(sasshi)}\t${strip(koui)}\t${strip(akui)}\t${others}"
+    s"${util.padding(name, max)} ${strip(shihai)} ${strip(jyujyun)} ${strip(dasan)} ${strip(jyunshin)} ${strip(oshi)} ${strip(sasshi)} ${strip(koui)} ${strip(akui)} ${others}"
   }
 
   def strip(opt: Option[Int]): String = {
-    opt.map(_.toString).getOrElse("-")
+    util.padding(opt.map(_.toString).getOrElse("-"), 4)
   }
 }
 
@@ -116,7 +116,7 @@ case class Item(
                  sub: Option[Int]
                ) {
   def toString(max: Int): String = {
-    s"${util.padding(name, max)}\t${mainName}\t${subName}"
+    s"${util.padding(name, max)} ${util.padding(mainName, 2)} ${subName}"
   }
 
   val mainTable = Map(
@@ -158,7 +158,9 @@ case class Skill(
                   detail: String
                 ) {
   def toString(max: Int): String = {
-    s"${util.padding(name, max)}\t${timing}\t${cost.map(_.toString).getOrElse("-")}\t${detail}"
+    val timingSize = 6
+    val costSize = 3
+    s"${util.padding(name, max)} ${util.padding(timing, timingSize)} ${util.padding(cost.map(_.toString).getOrElse("-"), costSize)} ${detail}"
   }
 }
 
@@ -177,8 +179,8 @@ case class Relation(
                      ueshita: Option[Int],
                      semeuke: Option[Int]
                    ) {
-  def toString(max: Int): String = {
-    s"${util.padding(to, max)}\t${name}\t${ueshitaName}\t${semeukeName}"
+  def toString(toMax: Int, nameMax: Int): String = {
+    s"${util.padding(to, toMax)} ${util.padding(name, nameMax)} ${util.padding(ueshitaName, 6)} ${semeukeName}"
   }
 
   val ueshitaTable = Map(

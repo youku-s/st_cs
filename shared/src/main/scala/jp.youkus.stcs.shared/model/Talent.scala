@@ -1,6 +1,6 @@
 package jp.youkus.stcs.shared.model
 
-import jp.youkus.stcs.shared.json
+import jp.youkus.stcs.shared.{json, util}
 
 case class Talent(
   shihai: Option[Int],
@@ -13,10 +13,10 @@ case class Talent(
   akui: Option[Int]
 ) {
   override def toString(): String = {
-    s"${strip(shihai)}\t${strip(jyujyun)}\t${strip(dasan)}\t${strip(jyunshin)}\t${strip(oshi)}\t${strip(sasshi)}\t${strip(koui)}\t${strip(akui)}"
+    s"${strip(shihai)} ${strip(jyujyun)} ${strip(dasan)} ${strip(jyunshin)} ${strip(oshi)} ${strip(sasshi)} ${strip(koui)} ${strip(akui)}"
   }
   def strip(opt: Option[Int]): String = {
-    opt.map(_.toString).getOrElse("-")
+    util.padding(opt.map(_.toString).getOrElse("-"), 4)
   }
 }
 object Talent {
