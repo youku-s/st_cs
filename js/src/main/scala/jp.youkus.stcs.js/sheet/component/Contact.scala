@@ -13,7 +13,7 @@ object Contact {
         <.div(
           <.a(
             ^.href := "https://twitter.com/intent/tweet?screen_name=youku_s",
-            "ツイッターで連絡する",
+            "Twitter",
             ^.target := "_blank"
           )
         )

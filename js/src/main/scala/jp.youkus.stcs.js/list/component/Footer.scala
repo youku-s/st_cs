@@ -9,7 +9,13 @@ object Footer {
     def render = {
       <.div(
         ^.classSet("footer" -> true),
-        "(c) 2016 よーく"
+        "(c) 2016 よーく",
+        " ",
+        <.a(
+          ^.href := "https://twitter.com/intent/tweet?screen_name=youku_s",
+          "Twitter(@youku_s)",
+          ^.target := "_blank"
+        )
       )
     }
   }

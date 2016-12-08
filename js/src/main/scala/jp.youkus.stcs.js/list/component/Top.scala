@@ -37,6 +37,15 @@ object Top {
       <.div(
         header(),
         <.div(
+          ^.classSet("box" -> true),
+          <.p(
+            "■リリースノート"
+          ),
+          <.p(
+            "2016/12/08 公開開始"
+          )
+        ),
+        <.div(
           ^.classSet("explanation" -> true),
           <.a(
             ^.href := "/sheet",

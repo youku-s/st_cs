@@ -32,10 +32,10 @@ object Paging {
       val head = if (current <= 1) { 1 } else if(current + 2 > maxPage) { maxPage - 4 } else { current - 2 }
       val indexes = Seq.iterate(0, ((p.max - 1) / pageUnit) + 1)(_ + 1).map{ x => (x + 1, x * pageUnit) }
         .dropWhile{ case (i, _) => i < head }.take(5)
-      
+      val from = if (p.max == 0) 0 else (current - 1) * pageUnit + 1
       <.div(
         <.div(
-          s"全${p.max}件中、${(current - 1) * pageUnit + 1}件目から${p.count}件を表示中"
+          s"全${p.max}件中、${from}件目から${p.count}件を表示中"
         ),
         <.div(
           ^.classSet("pagination" -> true),
