@@ -14,11 +14,12 @@ case class Part(
   sasshi: Option[Int],
   koui: Option[Int],
   akui: Option[Int],
-  sort: Int
+  sort: Int,
+  others: String
 )
 object Part extends SQLSyntaxSupport[Part] {
   override val tableName = "PART"
-  override val columns = Seq("ID", "CID", "NAME", "SHIHAI", "JYUJYUN", "DASAN", "JYUNSHIN", "OSHI", "SASSHI", "KOUI", "AKUI", "SORT")
+  override val columns = Seq("ID", "CID", "NAME", "SHIHAI", "JYUJYUN", "DASAN", "JYUNSHIN", "OSHI", "SASSHI", "KOUI", "AKUI", "SORT", "OTHERS")
   def apply(p: ResultName[Part])(rs: WrappedResultSet): Part = Part(
     id = rs.string(p.id),
     cid = rs.string(p.cid),
@@ -31,7 +32,8 @@ object Part extends SQLSyntaxSupport[Part] {
     sasshi = rs.intOpt(p.sasshi),
     koui = rs.intOpt(p.koui),
     akui = rs.intOpt(p.akui),
-    sort = rs.int(p.sort)
+    sort = rs.int(p.sort),
+    others = rs.string(p.others)
   )
   def findByCid(cid: String)(implicit session: DBSession): List[Part] = {
     val p = Part.syntax("p")
@@ -50,7 +52,8 @@ object Part extends SQLSyntaxSupport[Part] {
     sasshi: Option[Int],
     koui: Option[Int],
     akui: Option[Int],
-    sort: Int
+    sort: Int,
+    others: String
   )(implicit session: DBSession): Part = {
     val id = java.util.UUID.randomUUID.toString
     withSQL {
@@ -66,7 +69,8 @@ object Part extends SQLSyntaxSupport[Part] {
         Part.column.sasshi,
         Part.column.koui,
         Part.column.akui,
-        Part.column.sort
+        Part.column.sort,
+        Part.column.others
       ).values(
         id,
         cid,
@@ -79,7 +83,8 @@ object Part extends SQLSyntaxSupport[Part] {
         sasshi,
         koui,
         akui,
-        sort
+        sort,
+        others
       )
     }.update.apply()
     Part(
@@ -94,7 +99,8 @@ object Part extends SQLSyntaxSupport[Part] {
       sasshi = sasshi,
       koui = koui,
       akui = akui,
-      sort = sort
+      sort = sort,
+      others = others
     )
   }
   def removeByCid(cid: String)(implicit session: DBSession): Boolean = {

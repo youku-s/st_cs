@@ -38,7 +38,8 @@ class Api extends ScalatraServlet with ErrorHandler {
             sasshi = p.sasshi,
             koui = p.koui,
             akui = p.akui,
-            sort = sort
+            sort = sort,
+            others = p.others
           )
           json.Sort(sort, json.Part(part))
         }
@@ -208,7 +209,8 @@ class Api extends ScalatraServlet with ErrorHandler {
             sasshi = p.sasshi,
             koui = p.koui,
             akui = p.akui,
-            sort = sort
+            sort = sort,
+            others = p.others
           )
           json.Sort(sort, json.Part(part))
         }

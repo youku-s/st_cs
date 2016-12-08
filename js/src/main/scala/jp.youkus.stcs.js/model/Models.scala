@@ -23,7 +23,8 @@ case class Sheet(
 )
 case class Part(
   name: String,
-  talent: Talent
+  talent: Talent,
+  others: String
 )
 object Part {
   def apply(part: json.Part): Part = Part(
@@ -37,7 +38,8 @@ object Part {
       sasshi = part.sasshi,
       koui = part.koui,
       akui = part.akui
-    )
+    ),
+    others = part.others
   )
   def toJson(part: Part): json.Part = json.Part(
     name = part.name,
@@ -48,7 +50,8 @@ object Part {
     oshi = part.talent.oshi,
     sasshi = part.talent.sasshi,
     koui = part.talent.koui,
-    akui = part.talent.akui
+    akui = part.talent.akui,
+    others = part.others
   )
 }
 case class Talent(
@@ -177,7 +180,7 @@ object Sheet {
     csClass = None,
     csType = None,
     csEaude = None,
-    parts = Map(0 -> Part("", Talent.default)),
+    parts = Map(0 -> Part("", Talent.default,"")),
     items = Map(0 -> Item("", None, None)),
     skills = Map(
       0 -> Skill("", "", None, ""),

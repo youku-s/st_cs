@@ -41,7 +41,7 @@ object TalentTable {
         s.copy(
           parts = {
             val next = if (s.parts.isEmpty) 0 else s.parts.keys.max + 1
-            s.parts + (next -> M.Part("", M.Talent.default))
+            s.parts + (next -> M.Part("", M.Talent.default, ""))
           }
         )
       )
@@ -124,7 +124,7 @@ object TalentTable {
               <.tr(
                 <.th(
                   ^.rowSpan := "2",
-                  ^.style := js.Dictionary("width" -> "30%")
+                  ^.style := js.Dictionary("width" -> "20%")
                 ),
                 <.th(
                   ^.colSpan := "4",
@@ -143,7 +143,11 @@ object TalentTable {
                 ),
                 <.th(
                   ^.classSet("noborder" -> true),
-                  ^.style := js.Dictionary("width" -> "10%")
+                  ^.style := js.Dictionary("width" -> "15%")
+                ),
+                <.td(
+                  ^.classSet("noborder" -> true),
+                  ^.style := js.Dictionary("width" -> "5%")
                 )
               ),
               <.tr(
@@ -156,6 +160,9 @@ object TalentTable {
                 <.th("好意"),
                 <.th("悪意"),
                 <.th(
+                  ^.classSet("noborder" -> true)
+                ),
+                <.td(
                   ^.classSet("noborder" -> true)
                 )
               )
@@ -229,6 +236,9 @@ object TalentTable {
                 ),
                 <.td(
                   ^.classSet("noborder" -> true)
+                ),
+                <.td(
+                  ^.classSet("noborder" -> true)
                 )
               ),
               <.tr(
@@ -296,6 +306,9 @@ object TalentTable {
                     ^.value := classTalent.flatMap(_.akui).map(_.toString).getOrElse(""),
                     ^.readOnly := true
                   )
+                ),
+                <.td(
+                  ^.classSet("noborder" -> true)
                 ),
                 <.td(
                   ^.classSet("noborder" -> true)
@@ -369,6 +382,9 @@ object TalentTable {
                 ),
                 <.td(
                   ^.classSet("noborder" -> true)
+                ),
+                <.td(
+                  ^.classSet("noborder" -> true)
                 )
               ),
               <.tr(
@@ -439,6 +455,9 @@ object TalentTable {
                 ),
                 <.td(
                   ^.classSet("noborder" -> true)
+                ),
+                <.td(
+                  ^.classSet("noborder" -> true)
                 )
               ),
               <.tr(
@@ -451,7 +470,8 @@ object TalentTable {
                 <.th("察し"),
                 <.th("好意"),
                 <.th("悪意"),
-                <.th(
+                <.th("効果"),
+                <.td(
                   ^.classSet("noborder" -> true)
                 )
               ),
@@ -526,6 +546,13 @@ object TalentTable {
                       ^.classSet("akui" -> true),
                       ^.value := part.talent.akui.map(_.toString).getOrElse(""),
                       ^.onChange ==> onChange(index, (p, v) => p.copy(talent = p.talent.copy(akui = util.toIntOpt(v))))_
+                    )
+                  ),
+                  <.td(
+                    <.input(
+                      ^.`type` := "text",
+                      ^.value := part.others,
+                      ^.onChange ==> onChange(index, (p, v) => p.copy(others = v))_
                     )
                   ),
                   <.td(
