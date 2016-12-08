@@ -87,7 +87,7 @@ case class Part(
                  others: String
                ) {
   def toString(max: Int): String = {
-    s"${util.padding(name, max)}\t${strip(shihai)}\t${strip(jyujyun)}\t${strip(dasan)}\t${strip(jyunshin)}\t${strip(oshi)}\t${strip(sasshi)}\t${strip(koui)}\t${strip(akui)}\t${util.padding(others, max)}"
+    s"${util.padding(name, max)}\t${strip(shihai)}\t${strip(jyujyun)}\t${strip(dasan)}\t${strip(jyunshin)}\t${strip(oshi)}\t${strip(sasshi)}\t${strip(koui)}\t${strip(akui)}\t${others}"
   }
 
   def strip(opt: Option[Int]): String = {

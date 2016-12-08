@@ -142,7 +142,7 @@ class Api extends ScalatraServlet with ErrorHandler {
     sb.append(s"${total.toString}\r\n")
     sb.append("\r\n")
     sb.append("■世界の部品\r\n")
-    sb.append(s"${util.padding("名前", parts.map(_.name.getBytes.size).max)}\t支配\t従順\t打算\t純真\t押し\t察し\t好意\t悪意\r\n")
+    sb.append(s"${util.padding("名前", parts.map(_.name.getBytes.size).max)}\t支配\t従順\t打算\t純真\t押し\t察し\t好意\t悪意\t効果\r\n")
     for (part <- parts) {
       sb.append(s"${part.toString(parts.map(_.name.getBytes.size).max)}\r\n")
     }
