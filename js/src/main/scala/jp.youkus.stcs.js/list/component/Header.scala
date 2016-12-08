@@ -10,7 +10,7 @@ object Header {
       <.div(
         ^.classSet("header" -> true),
         <.div(
-          <.h1("少女展爛会キャラクターシート一覧")
+          <.h1("少女展爛会キャラクターシート一覧(β版)")
         ),
         <.div(
           ^.classSet("copyright" -> true),
