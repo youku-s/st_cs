@@ -1,6 +1,6 @@
 package jp.youkus.stcs.shared.model
 
-import org.joda.time.DateTime
+import org.joda.time.{DateTime, DateTimeZone}
 import scalikejdbc._
 import java.security.{MessageDigest, SecureRandom}
 
@@ -106,7 +106,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
               display: Boolean,
               password: Option[String]
             )(implicit session: DBSession): Charactor = {
-    val createDate = DateTime.now
+    val createDate = DateTime.now(DateTimeZone.forID("Asia/Tokyo"))
     val id = java.util.UUID.randomUUID.toString
     val hashed = password.map(toHash)
     withSQL {
@@ -167,7 +167,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
         Charactor.column.memo -> memo,
         Charactor.column.password -> password.map(toHash),
         Charactor.column.display -> display,
-        Charactor.column.updateDate -> DateTime.now
+        Charactor.column.updateDate -> DateTime.now(DateTimeZone.forID("Asia/Tokyo"))
       ).where.eq(Charactor.column.id, id)
     }.update.apply()
     find(id).get
@@ -176,7 +176,7 @@ object Charactor extends SQLSyntaxSupport[Charactor] {
   def remove(id: String)(implicit session: DBSession): Boolean = {
     val count = withSQL {
       update(Charactor).set(
-        Charactor.column.deleteDate -> DateTime.now
+        Charactor.column.deleteDate -> DateTime.now(DateTimeZone.forID("Asia/Tokyo"))
       ).where.eq(Charactor.column.id, id)
     }.update.apply()
     count > 0
