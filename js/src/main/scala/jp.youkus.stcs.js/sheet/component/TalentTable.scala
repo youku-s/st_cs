@@ -124,7 +124,7 @@ object TalentTable {
               <.tr(
                 <.th(
                   ^.rowSpan := "2",
-                  ^.style := js.Dictionary("width" -> "25%")
+                  ^.style := js.Dictionary("width" -> "20%")
                 ),
                 <.th(
                   ^.colSpan := "4",
@@ -143,7 +143,7 @@ object TalentTable {
                 ),
                 <.th(
                   ^.classSet("noborder" -> true),
-                  ^.style := js.Dictionary("width" -> "25%")
+                  ^.style := js.Dictionary("width" -> "30%")
                 ),
                 <.td(
                   ^.classSet("noborder" -> true),

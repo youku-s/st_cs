@@ -37,15 +37,15 @@ object SkillTable {
                   "名前"
                 ),
                 <.th(
-                  ^.style := js.Dictionary("width" -> "10%"),
+                  ^.style := js.Dictionary("width" -> "5%"),
                   "ﾀｲﾐﾝｸﾞ"
                 ),
                 <.th(
-                  ^.style := js.Dictionary("width" -> "10%"),
+                  ^.style := js.Dictionary("width" -> "5%"),
                   "重さ"
                 ),
                 <.th(
-                  ^.style := js.Dictionary("width" -> "60%"),
+                  ^.style := js.Dictionary("width" -> "70%"),
                   "内容"
                 )
               )

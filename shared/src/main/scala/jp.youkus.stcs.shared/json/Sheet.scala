@@ -1,6 +1,9 @@
 package jp.youkus.stcs.shared.json
 
+import java.util.TimeZone
+
 import jp.youkus.stcs.shared.{model, util}
+import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
 
 object request {
@@ -68,7 +71,7 @@ object response {
       usePassword = charactor.password.isDefined,
       tags = tags,
       display = charactor.display,
-      updateDate = charactor.updateDate.toString(DateTimeFormat.mediumDateTime())
+      updateDate = charactor.updateDate.toDateTime(DateTimeZone.forID("Asia/Tokyo")).toString(DateTimeFormat.mediumDateTime())
     )
   }
 
@@ -159,7 +162,7 @@ case class Skill(
                 ) {
   def toString(max: Int): String = {
     val timingSize = 6
-    val costSize = 3
+    val costSize = 4
     s"${util.padding(name, max)} ${util.padding(timing, timingSize)} ${util.padding(cost.map(_.toString).getOrElse("-"), costSize)} ${detail}"
   }
 }
@@ -180,7 +183,7 @@ case class Relation(
                      semeuke: Option[Int]
                    ) {
   def toString(toMax: Int, nameMax: Int): String = {
-    s"${util.padding(to, toMax)} ${util.padding(name, nameMax)} ${util.padding(ueshitaName, 6)} ${semeukeName}"
+    s"${util.padding(to, toMax)} ${util.padding(name, nameMax)} ${util.padding(ueshitaName, 4)} ${semeukeName}"
   }
 
   val ueshitaTable = Map(

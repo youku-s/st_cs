@@ -157,7 +157,7 @@ class Api extends ScalatraServlet with ErrorHandler {
     sb.append("\r\n")
     sb.append("■特技\r\n")
     val skillNameMax = math.max(skills.map(_.name.getBytes("Shift_JIS").size).max, 4)
-    sb.append(s"${util.padding("名前", skillNameMax)} ﾀｲﾐﾝｸﾞ ｺｽﾄ 内容\r\n")
+    sb.append(s"${util.padding("名前", skillNameMax)} ﾀｲﾐﾝｸﾞ 重さ 内容\r\n")
     for(skill <- skills) {
       sb.append(s"${skill.toString(skillNameMax)}\r\n")
     }

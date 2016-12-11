@@ -88,7 +88,7 @@ table.item {
   table-layout: fixed;
 }
 table.skill {
-  width: 600px;
+  width: 100%;
   table-layout: fixed;
 }
 table.relation {

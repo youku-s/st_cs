@@ -9,5 +9,3 @@ project/target
 *.swp
 *.swo
 .idea
-.env
-application.conf

@@ -1,1 +1,0 @@
-web: jvm/target/universal/stage/bin/stcs -Dhttp.port=${PORT}
